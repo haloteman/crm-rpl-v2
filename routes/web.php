@@ -8,9 +8,14 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
 
-Route::redirect('/', '/login');
+Route::get('/', [WebsiteController::class, 'beranda'])->name('website.beranda');
+Route::get('/layanan', [WebsiteController::class, 'layanan'])->name('website.layanan');
+Route::get('/layanan/{slug}', [WebsiteController::class, 'detailLayanan'])->name('website.layanan.show');
+Route::get('/tentang-kami', [WebsiteController::class, 'tentangKami'])->name('website.tentang-kami');
+Route::get('/kontak', [WebsiteController::class, 'kontak'])->name('website.kontak');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
