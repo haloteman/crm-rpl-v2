@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +19,11 @@ Route::middleware('guest')->group(function () {
     Route::post('/daftar', [CustomerAuthController::class, 'register']);
     Route::get('/masuk', [CustomerAuthController::class, 'showLogin'])->name('customer.login');
     Route::post('/masuk', [CustomerAuthController::class, 'login']);
+
+    Route::get('/lupa-password', [LupaPasswordController::class, 'create'])->name('password.request');
+    Route::post('/lupa-password', [LupaPasswordController::class, 'kirim'])->name('password.email');
+    Route::get('/reset-password/{token}', [LupaPasswordController::class, 'edit'])->name('password.reset');
+    Route::post('/reset-password', [LupaPasswordController::class, 'update'])->name('password.store');
 });
 
 Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
@@ -26,6 +33,12 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
 
     Route::get('/password', [PasswordController::class, 'edit'])->name('password.edit');
     Route::post('/password', [PasswordController::class, 'update'])->name('password.update');
+
+    Route::middleware('role:Customer')->group(function () {
+        Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
+        Route::get('/profil/ubah', [ProfilController::class, 'edit'])->name('profil.edit');
+        Route::post('/profil/ubah', [ProfilController::class, 'update'])->name('profil.update');
+    });
 
     Route::middleware('permission:user.view')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');

@@ -3,11 +3,18 @@
 @php
     $menu = [
         ['route' => 'beranda', 'label' => 'Beranda', 'icon' => 'dashboard'],
+        ['route' => 'profil.show', 'label' => 'Profil', 'icon' => 'users', 'match' => 'profil.*', 'role' => 'Customer'],
         ['route' => 'pelanggan.index', 'label' => 'Data Pelanggan', 'icon' => 'customer', 'match' => 'pelanggan.*', 'permission' => 'customer.view'],
         ['route' => 'users.index', 'label' => 'User Management', 'icon' => 'user-cog', 'match' => 'users.*', 'permission' => 'user.view'],
     ];
 
-    $menu = array_filter($menu, fn ($item) => ! isset($item['permission']) || auth()->user()->can($item['permission']));
+    $menu = array_filter($menu, function ($item) {
+        if (isset($item['role'])) {
+            return auth()->user()->hasRole($item['role']);
+        }
+
+        return ! isset($item['permission']) || auth()->user()->can($item['permission']);
+    });
 
     $me = auth()->user();
     $inisial = collect(preg_split('/\s+/', trim($me->name)))

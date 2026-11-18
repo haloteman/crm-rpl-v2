@@ -21,7 +21,10 @@
            value="{{ old('email') }}" placeholder="Masukkan email Anda"
            class="field mt-2 py-3.5">
 
-    <label for="password" class="mt-5 block text-sm font-semibold">Password</label>
+    <div class="mt-5 flex items-center justify-between">
+        <label for="password" class="block text-sm font-semibold">Password</label>
+        <a href="{{ route('password.request') }}" class="text-xs font-medium text-brand-dark hover:underline">Lupa password?</a>
+    </div>
     <div class="relative mt-2">
         <input id="password" name="password" :type="lihat ? 'text' : 'password'" type="password"
                autocomplete="current-password" placeholder="Masukkan password Anda"
