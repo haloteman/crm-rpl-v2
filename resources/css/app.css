@@ -1,0 +1,65 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+    --color-brand: #1247b2;       /* sidebar + latar login */
+    --color-brand-dark: #235ad9;  /* tombol utama, link, aksen biru */
+
+    --color-canvas: #f5f7fb;      /* latar halaman */
+    --color-thead: #f8fafd;       /* header tabel, kotak info netral */
+    --color-tint: #edf3ff;        /* latar biru muda (badge, banner, avatar) */
+    --color-ink: #172b4d;         /* teks utama / judul */
+    --color-line: #e3e9f2;        /* garis & border */
+
+    --color-won: #168165;
+    --color-won-tint: #eaf7f1;
+    --color-warn: #a56813;
+    --color-warn-tint: #fff5e3;
+    --color-lost: #c63741;
+    --color-lost-tint: #fff0f1;
+}
+
+[x-cloak] { display: none !important; }
+
+@layer base {
+    /* Tailwind v4: border default-nya hitam, samakan dengan garis Figma */
+    *, ::after, ::before, ::backdrop, ::file-selector-button { border-color: var(--color-line); }
+
+    body { @apply bg-canvas text-ink antialiased; }
+}
+
+@layer components {
+    .card { @apply rounded-xl border bg-white; }
+
+    /* ukuran sesuai Figma: tinggi input/tombol 40px, teks 13px */
+    .field { @apply w-full rounded-lg border bg-white px-3.5 py-[9px] text-[13px] text-ink outline-none placeholder:text-slate-400 focus:border-brand-dark focus:ring-2 focus:ring-brand-dark/20; }
+
+    .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-dark px-3.5 py-2.5 text-[13px] font-semibold text-white hover:bg-brand disabled:opacity-60; }
+    .btn-outline { @apply inline-flex items-center justify-center gap-2 rounded-lg border bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink hover:bg-thead disabled:opacity-60; }
+    .btn-danger { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-lost px-3.5 py-2.5 text-[13px] font-semibold text-white hover:opacity-90 disabled:opacity-60; }
+
+    .page-title { @apply text-2xl font-bold leading-tight sm:text-[26px]; }
+    .page-sub { @apply mt-1 text-[13px] text-slate-500; }
+    .eyebrow { @apply text-xs font-semibold uppercase tracking-wide text-brand-dark; }
+
+    .badge { @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-medium; }
+    .badge-blue { @apply bg-tint text-brand-dark; }
+    .badge-amber { @apply bg-warn-tint text-warn; }
+    .badge-green { @apply bg-won-tint text-won; }
+    .badge-red { @apply bg-lost-tint text-lost; }
+    .badge-purple { @apply bg-violet-50 text-violet-700; }
+    .badge-gray { @apply bg-slate-100 text-slate-600; }
+
+    .copy-chip { @apply inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 text-xs font-medium text-brand-dark hover:bg-tint; }
+
+    .pager-btn { @apply inline-flex size-[30px] items-center justify-center rounded-lg border text-xs text-slate-500 hover:bg-thead; }
+    .pager-btn-active { @apply border-transparent bg-tint font-semibold text-brand-dark hover:bg-tint; }
+}
