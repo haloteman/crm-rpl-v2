@@ -7,7 +7,9 @@ use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PesananController;
+use App\Http\Controllers\PesananMasukController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\ReferensiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
@@ -51,7 +53,16 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/pesan/{slug}', [PesananController::class, 'create'])->name('pesanan.create');
         Route::post('/pesan/{slug}', [PesananController::class, 'store'])->name('pesanan.store');
         Route::get('/pesanan/{order}/terkirim', [PesananController::class, 'terkirim'])->name('pesanan.terkirim');
+        Route::get('/pesanan-saya', [PesananController::class, 'index'])->name('pesanan.index');
+        Route::get('/pesanan-saya/{order}', [PesananController::class, 'show'])->name('pesanan.show');
     });
+
+    Route::middleware('permission:order.view')->group(function () {
+        Route::get('/pesanan-masuk', [PesananMasukController::class, 'index'])->name('pesanan-masuk.index');
+        Route::get('/pesanan-masuk/{order}', [PesananMasukController::class, 'show'])->name('pesanan-masuk.show');
+    });
+
+    Route::get('/referensi/{referensi}', [ReferensiController::class, 'unduh'])->name('referensi.unduh');
 
     Route::middleware('permission:service.manage')->group(function () {
         Route::get('/katalog-layanan', [KatalogController::class, 'index'])->name('katalog.index');

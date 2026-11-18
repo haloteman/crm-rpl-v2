@@ -26,6 +26,11 @@ class StatusDefinition extends Model
         ];
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'status_id');
+    }
+
     public static function pesanan($code)
     {
         return static::where('scope', 'order')->where('code', $code)->firstOrFail();

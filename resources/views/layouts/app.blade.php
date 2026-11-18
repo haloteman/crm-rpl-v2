@@ -3,6 +3,8 @@
 @php
     $menu = [
         ['route' => 'beranda', 'label' => 'Beranda', 'icon' => 'dashboard'],
+        ['route' => 'pesanan.index', 'label' => 'Pesanan Saya', 'icon' => 'penawaran', 'match' => 'pesanan.*', 'permission' => 'order.own'],
+        ['route' => 'pesanan-masuk.index', 'label' => 'Pesanan', 'icon' => 'penawaran', 'match' => 'pesanan-masuk.*', 'permission' => 'order.view'],
         ['route' => 'profil.show', 'label' => 'Profil', 'icon' => 'users', 'match' => 'profil.*', 'role' => 'Customer'],
         ['route' => 'pelanggan.index', 'label' => 'Data Pelanggan', 'icon' => 'customer', 'match' => 'pelanggan.*', 'permission' => 'customer.view'],
         ['route' => 'katalog.index', 'label' => 'Katalog Layanan', 'icon' => 'folder', 'match' => 'katalog.*', 'permission' => 'service.manage'],

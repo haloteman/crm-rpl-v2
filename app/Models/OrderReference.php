@@ -17,4 +17,9 @@ class OrderReference extends Model
         'mime_type',
         'file_size',
     ];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
+    }
 }

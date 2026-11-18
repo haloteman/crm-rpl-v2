@@ -92,10 +92,34 @@ class PesananController extends Controller
 
     public function terkirim(Order $order)
     {
+        $this->pastikanMilikSendiri($order);
+
+        return view('pesanan.terkirim', ['order' => $order]);
+    }
+
+    public function index()
+    {
+        return view('pesanan.index', [
+            'orders' => Order::with('service', 'status')->where('customer_id', auth()->id())->latest()->paginate(10),
+        ]);
+    }
+
+    public function show(Order $order)
+    {
+        $this->pastikanMilikSendiri($order);
+
+        $order->load('service', 'status', 'references', 'statusHistories');
+
+        return view('pesanan.show', [
+            'order' => $order,
+            'labelStatus' => StatusDefinition::where('scope', 'order')->pluck('customer_label', 'code'),
+        ]);
+    }
+
+    private function pastikanMilikSendiri(Order $order)
+    {
         if ($order->customer_id !== auth()->id()) {
             abort(404);
         }
-
-        return view('pesanan.terkirim', ['order' => $order]);
     }
 }

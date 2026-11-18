@@ -28,4 +28,20 @@ class WaLinkBuilder
 
         return 'https://wa.me/'.ltrim(SystemSetting::get('wa_admin'), '+').'?text='.urlencode($pesan.'.');
     }
+
+    public static function buildOwnerConsultation($order)
+    {
+        $pesan = 'Halo, saya '.$order->contact_name.'. Saya ingin melanjutkan konsultasi pesanan '
+            .$order->order_code.' ('.$order->service->name.').';
+
+        return 'https://wa.me/'.ltrim(SystemSetting::get('wa_owner'), '+').'?text='.urlencode($pesan);
+    }
+
+    public static function buildCustomerContact($order, $namaOwner)
+    {
+        $pesan = 'Halo '.$order->contact_name.', saya '.$namaOwner.' dari PT Media Creative. Kami menindaklanjuti pesanan '
+            .$order->order_code.' ('.$order->title.'). Boleh kita diskusikan kebutuhannya?';
+
+        return 'https://wa.me/'.ltrim($order->contact_phone, '+').'?text='.urlencode($pesan);
+    }
 }
