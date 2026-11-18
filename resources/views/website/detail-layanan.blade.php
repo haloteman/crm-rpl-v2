@@ -23,6 +23,7 @@
     <p class="mt-6 rounded-lg bg-warn-tint px-4 py-3 text-sm text-warn">Harga disepakati setelah konsultasi lewat WhatsApp. Ketentuan revisi disepakati saat konsultasi.</p>
 
     <div class="mt-6 flex flex-wrap gap-3">
+        <a href="{{ route('pesanan.create', $layanan->slug) }}" class="btn-primary">Ajukan Pesanan</a>
         <a href="{{ \App\Services\WaLinkBuilder::buildAdminInquiry($layanan) }}" target="_blank" rel="noopener" class="btn-outline">Tanya via WhatsApp</a>
     </div>
 </section>

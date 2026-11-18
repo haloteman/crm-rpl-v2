@@ -6,6 +6,7 @@ use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\PesananController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
@@ -44,6 +45,12 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
         Route::get('/profil/ubah', [ProfilController::class, 'edit'])->name('profil.edit');
         Route::post('/profil/ubah', [ProfilController::class, 'update'])->name('profil.update');
+    });
+
+    Route::middleware('permission:order.own')->group(function () {
+        Route::get('/pesan/{slug}', [PesananController::class, 'create'])->name('pesanan.create');
+        Route::post('/pesan/{slug}', [PesananController::class, 'store'])->name('pesanan.store');
+        Route::get('/pesanan/{order}/terkirim', [PesananController::class, 'terkirim'])->name('pesanan.terkirim');
     });
 
     Route::middleware('permission:service.manage')->group(function () {

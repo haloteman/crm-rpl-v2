@@ -1,0 +1,71 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class Order extends Model
+{
+    protected $fillable = [
+        'order_code',
+        'customer_id',
+        'service_id',
+        'status_id',
+        'created_by',
+        'created_via',
+        'reorder_from_id',
+        'title',
+        'description',
+        'expected_deadline',
+        'budget_estimate',
+        'extra_fields',
+        'contact_name',
+        'contact_phone',
+        'cancel_reason',
+        'cancelled_at',
+        'cancelled_by',
+    ];
+
+    protected function casts(): array
+    {
+        return [
+            'expected_deadline' => 'date',
+            'budget_estimate' => 'decimal:2',
+            'extra_fields' => 'array',
+            'cancelled_at' => 'datetime',
+        ];
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(User::class, 'customer_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
+    }
+
+    public function status()
+    {
+        return $this->belongsTo(StatusDefinition::class, 'status_id');
+    }
+
+    public function references()
+    {
+        return $this->hasMany(OrderReference::class);
+    }
+
+    public function statusHistories()
+    {
+        return $this->hasMany(OrderStatusHistory::class);
+    }
+
+    // contoh kode: ORD-0001
+    public static function generateCode()
+    {
+        $nomor = (static::max('id') ?? 0) + 1;
+
+        return 'ORD-'.str_pad($nomor, 4, '0', STR_PAD_LEFT);
+    }
+}

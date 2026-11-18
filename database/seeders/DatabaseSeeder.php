@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\Service;
+use App\Models\StatusDefinition;
 use App\Models\SystemSetting;
 use App\Models\User;
 use App\Services\CredentialGenerator;
@@ -98,5 +99,28 @@ class DatabaseSeeder extends Seeder
         // nomor contoh, ganti dengan nomor WhatsApp asli perusahaan
         SystemSetting::create(['setting_key' => 'wa_admin', 'setting_value' => '6281234567890', 'description' => 'Nomor WhatsApp Admin']);
         SystemSetting::create(['setting_key' => 'wa_owner', 'setting_value' => '6281234567891', 'description' => 'Nomor WhatsApp Owner']);
+
+        // kode, label internal, label untuk customer, status berikutnya yang boleh
+        $statusPesanan = [
+            ['menunggu_konsultasi', 'Menunggu Konsultasi', 'Menunggu Konsultasi', ['menunggu_dp', 'dibatalkan']],
+            ['menunggu_dp', 'Menunggu DP', 'Menunggu Pembayaran DP', ['dp_diterima', 'dibatalkan']],
+            ['dp_diterima', 'DP Diterima', 'DP Diterima', ['dikerjakan']],
+            ['dikerjakan', 'Dikerjakan', 'Sedang Dikerjakan', ['revisi', 'selesai']],
+            ['revisi', 'Revisi', 'Revisi', ['dikerjakan', 'selesai']],
+            ['selesai', 'Selesai', 'Selesai', []],
+            ['dibatalkan', 'Dibatalkan', 'Dibatalkan', []],
+        ];
+
+        foreach ($statusPesanan as $urutan => [$kode, $label, $labelCustomer, $berikutnya]) {
+            StatusDefinition::create([
+                'scope' => 'order',
+                'code' => $kode,
+                'label' => $label,
+                'customer_label' => $labelCustomer,
+                'sort_order' => $urutan + 1,
+                'allowed_next' => $berikutnya,
+                'is_final' => empty($berikutnya),
+            ]);
+        }
     }
 }

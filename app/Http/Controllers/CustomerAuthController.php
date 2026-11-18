@@ -96,6 +96,7 @@ class CustomerAuthController extends Controller
         $request->session()->regenerate();
         $user->update(['last_login_at' => now()]);
 
-        return redirect()->route('beranda');
+        // kalau tadi mau memesan, kembalikan ke form pesanan
+        return redirect()->intended(route('beranda'));
     }
 }

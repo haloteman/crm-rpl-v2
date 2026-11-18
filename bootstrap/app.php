@@ -19,6 +19,9 @@ return Application::configure(basePath: dirname(__DIR__))
 
         // user yang sudah login lalu buka /login diarahkan ke beranda
         $middleware->redirectUsersTo(fn () => route('beranda'));
+
+        // customer yang belum login saat mau memesan diarahkan ke halaman masuk customer
+        $middleware->redirectGuestsTo(fn ($request) => $request->routeIs('pesanan.*') ? route('customer.login') : route('login'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
