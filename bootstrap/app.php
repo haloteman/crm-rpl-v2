@@ -11,7 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->alias([
+            'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+            'wajib-ganti-password' => \App\Http\Middleware\WajibGantiPassword::class,
+        ]);
+
+        // user yang sudah login lalu buka /login diarahkan ke beranda
+        $middleware->redirectUsersTo(fn () => route('beranda'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
