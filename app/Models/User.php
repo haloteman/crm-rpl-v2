@@ -46,6 +46,11 @@ class User extends Authenticatable
         return $this->hasOne(InternalProfile::class);
     }
 
+    public function customerProfile()
+    {
+        return $this->hasOne(CustomerProfile::class);
+    }
+
     public function credentialIssuances()
     {
         return $this->hasMany(CredentialIssuance::class);

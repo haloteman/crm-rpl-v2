@@ -42,5 +42,9 @@
         <x-icon name="question-circle" class="size-4 shrink-0" />
         Lupa password? Minta Super Admin untuk mereset password Anda.
     </p>
+
+    <p class="mt-3 text-center text-sm text-slate-500">
+        Pelanggan? <a href="{{ route('customer.login') }}" class="font-semibold text-brand-dark hover:underline">Masuk dengan email</a>
+    </p>
 </form>
 @endsection

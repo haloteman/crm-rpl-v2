@@ -29,7 +29,7 @@ class PasswordController extends Controller
         $user = $request->user();
         $user->update(['password' => $request->password_baru]);
 
-        $user->internalProfile->update([
+        $user->internalProfile?->update([
             'must_change_password' => false,
             'password_changed_at' => now(),
         ]);
