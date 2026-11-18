@@ -23,5 +23,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
     Route::middleware('permission:user.view')->group(function () {
         Route::get('/users', [UserController::class, 'index'])->name('users.index');
         Route::post('/users', [UserController::class, 'store'])->middleware('permission:user.create')->name('users.store');
+        Route::post('/users/{user}/reset-password', [UserController::class, 'resetPassword'])->middleware('permission:user.reset-password')->name('users.reset');
+        Route::post('/users/{user}/hapus', [UserController::class, 'destroy'])->middleware('permission:user.delete')->name('users.destroy');
     });
 });

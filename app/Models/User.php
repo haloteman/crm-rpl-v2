@@ -50,4 +50,15 @@ class User extends Authenticatable
     {
         return $this->hasMany(CredentialIssuance::class);
     }
+
+    // tidak ada yang bisa reset atau hapus akunnya sendiri, dan akun Owner tidak bisa dihapus
+    public function canResetPassword($target)
+    {
+        return $this->can('user.reset-password') && $target->id !== $this->id && ! $target->hasRole(Role::OWNER);
+    }
+
+    public function canDelete($target)
+    {
+        return $this->can('user.delete') && $target->id !== $this->id && ! $target->hasRole(Role::OWNER);
+    }
 }

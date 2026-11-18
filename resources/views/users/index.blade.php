@@ -68,6 +68,7 @@
                     <th class="px-5 py-3 font-medium">NIP</th>
                     <th class="px-5 py-3 font-medium">Role</th>
                     <th class="px-5 py-3 font-medium">Login Terakhir</th>
+                    <th class="px-5 py-3 font-medium">Aksi</th>
                 </tr>
             </thead>
             <tbody class="block md:table-row-group">
@@ -97,10 +98,24 @@
                             <span class="text-xs md:hidden">Login Terakhir</span>
                             <span>{{ $user->last_login_at ? $user->last_login_at->format('d/m/Y H:i') : 'Belum pernah login' }}</span>
                         </td>
+                        <td class="flex items-center justify-between gap-3 py-1 md:table-cell md:px-5 md:py-3">
+                            <span class="text-xs text-slate-500 md:hidden">Aksi</span>
+                            <span class="flex items-center gap-4 text-xs">
+                                @if (auth()->user()->canResetPassword($user))
+                                    <button type="button" @click="modal = 'reset-{{ $user->id }}'" class="font-medium text-brand-dark hover:underline">Reset Password</button>
+                                @endif
+                                @if (auth()->user()->canDelete($user))
+                                    <button type="button" @click="modal = 'hapus-{{ $user->id }}'" class="font-medium text-lost hover:underline">Hapus Akun</button>
+                                @endif
+                                @if (! auth()->user()->canResetPassword($user) && ! auth()->user()->canDelete($user))
+                                    <span class="text-slate-400">—</span>
+                                @endif
+                            </span>
+                        </td>
                     </tr>
                 @empty
                     <tr class="block border-t md:table-row">
-                        <td colspan="4" class="block px-5 py-8 text-center text-slate-500 md:table-cell">Akun tidak ditemukan</td>
+                        <td colspan="5" class="block px-5 py-8 text-center text-slate-500 md:table-cell">Akun tidak ditemukan</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -112,7 +127,94 @@
         </div>
     </section>
 
-    <p class="mt-4 text-xs text-slate-500">Password tidak ditampilkan dalam daftar pengguna.</p>
+    <p class="mt-4 text-xs text-slate-500">Akun yang sudah dihapus tidak ditampilkan. Password tidak ditampilkan dalam daftar pengguna.</p>
+
+    @foreach ($users as $user)
+        {{-- popup konfirmasi reset password --}}
+        <div x-show="modal === 'reset-{{ $user->id }}'" x-cloak x-transition.opacity
+             class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 p-4" role="dialog" aria-modal="true">
+            <div class="flex min-h-full items-center justify-center">
+                <div class="card w-full max-w-md p-5 sm:p-6" @click.outside="modal = ''">
+                    <div class="flex items-start justify-between">
+                        <div class="flex size-12 items-center justify-center rounded-lg bg-tint text-brand-dark">
+                            <x-icon name="key" class="size-6" />
+                        </div>
+                        <button type="button" @click="modal = ''" aria-label="Tutup"
+                                class="-mr-2 -mt-2 flex size-9 items-center justify-center rounded-full text-slate-400 hover:bg-thead">
+                            <x-icon name="x-mark" class="size-5" />
+                        </button>
+                    </div>
+
+                    <h2 class="mt-4 text-xl font-semibold">Reset password akun ini?</h2>
+                    <p class="mt-1 text-sm text-slate-500">Pastikan akun yang dipilih sudah benar sebelum melanjutkan.</p>
+
+                    <div class="mt-4 flex items-start justify-between gap-3 rounded-lg border bg-thead px-4 py-3">
+                        <div class="min-w-0">
+                            <div class="font-semibold">{{ $user->name }}</div>
+                            <div class="font-mono text-sm text-slate-500">{{ $user->internalProfile->nip }}</div>
+                        </div>
+                        <span class="shrink-0 text-xs text-slate-500">{{ $user->getRoleNames()->first() }}</span>
+                    </div>
+
+                    <div class="mt-4 rounded-lg bg-tint px-4 py-3 text-sm text-brand-dark">
+                        Password baru dibuat otomatis dan wajib diganti saat login berikutnya.
+                    </div>
+
+                    <form method="POST" action="{{ route('users.reset', $user) }}" class="mt-6 flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:justify-end">
+                        @csrf
+                        <button type="button" @click="modal = ''" class="btn-outline">Batal</button>
+                        <button type="submit" class="btn-primary">Reset Password</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{-- popup konfirmasi hapus akun --}}
+        <div x-show="modal === 'hapus-{{ $user->id }}'" x-cloak x-transition.opacity
+             class="fixed inset-0 z-50 overflow-y-auto bg-slate-900/50 p-4" role="dialog" aria-modal="true">
+            <div class="flex min-h-full items-center justify-center">
+                <div class="card w-full max-w-md p-5 sm:p-6" @click.outside="modal = ''">
+                    <div class="flex items-start justify-between">
+                        <div class="flex size-12 items-center justify-center rounded-lg bg-lost-tint text-lost">
+                            <x-icon name="trash" class="size-6" />
+                        </div>
+                        <button type="button" @click="modal = ''" aria-label="Tutup"
+                                class="-mr-2 -mt-2 flex size-9 items-center justify-center rounded-full text-slate-400 hover:bg-thead">
+                            <x-icon name="x-mark" class="size-5" />
+                        </button>
+                    </div>
+
+                    <h2 class="mt-4 text-xl font-semibold">Hapus akun pengguna?</h2>
+                    <p class="mt-1 text-sm text-slate-500">Pastikan akun yang dipilih sudah benar sebelum melanjutkan.</p>
+
+                    <div class="mt-4 flex items-start justify-between gap-3 rounded-lg border bg-thead px-4 py-3">
+                        <div class="min-w-0">
+                            <div class="font-semibold">{{ $user->name }}</div>
+                            <div class="font-mono text-sm text-slate-500">{{ $user->internalProfile->nip }}</div>
+                        </div>
+                        <span class="shrink-0 text-xs text-slate-500">{{ $user->getRoleNames()->first() }}</span>
+                    </div>
+
+                    <div class="mt-4 flex items-start gap-3 rounded-lg bg-lost-tint px-4 py-3 text-sm text-lost">
+                        <x-icon name="exclamation-circle" class="mt-0.5 size-5 shrink-0" />
+                        <div>
+                            <div class="font-semibold">Pengguna akan kehilangan akses</div>
+                            <p>Setelah dihapus, pengguna tidak dapat login dan akun tidak lagi muncul di Daftar Pengguna.</p>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-xs text-slate-500">Pilih Batal jika Anda masih ragu atau ingin memeriksa akun kembali.</p>
+
+                    <form method="POST" action="{{ route('users.destroy', $user) }}" class="mt-6 flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:justify-end">
+                        @csrf
+                        <button type="button" @click="modal = ''" class="btn-outline">Batal</button>
+                        <button type="submit" class="btn-danger">
+                            <x-icon name="trash" class="size-4" /> Hapus Akun
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
 
     {{-- popup tambah akun --}}
     <div x-show="modal === 'tambah'" x-cloak x-transition.opacity

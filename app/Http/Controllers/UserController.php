@@ -80,6 +80,41 @@ class UserController extends Controller
         ]);
     }
 
+    public function resetPassword(User $user)
+    {
+        if (! auth()->user()->canResetPassword($user)) {
+            abort(403);
+        }
+
+        $password = CredentialGenerator::generatePassword();
+
+        $user->update(['password' => $password]);
+        $user->internalProfile->update(['must_change_password' => true]);
+
+        $user->credentialIssuances()->create([
+            'issued_by' => auth()->id(),
+            'type' => CredentialIssuance::RESET,
+            'issued_at' => now(),
+        ]);
+
+        return redirect()->route('users.index')->with('kredensial', [
+            'judul' => 'Password Berhasil Direset',
+            'nip' => $user->internalProfile->nip,
+            'password' => $password,
+        ]);
+    }
+
+    public function destroy(User $user)
+    {
+        if (! auth()->user()->canDelete($user)) {
+            abort(403);
+        }
+
+        $user->delete();
+
+        return redirect()->route('users.index')->with('status', 'Akun '.$user->name.' berhasil dihapus');
+    }
+
     private function pilihanRole()
     {
         return Role::whereIn('name', [Role::ADMIN, Role::KEPALA_STAF_DESAINER, Role::DESAINER])->orderBy('id')->get();
