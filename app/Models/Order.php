@@ -56,6 +56,17 @@ class Order extends Model
         return $this->hasMany(OrderReference::class);
     }
 
+    public function consultation()
+    {
+        return $this->hasOne(OrderConsultation::class);
+    }
+
+    // catatan tidak bisa diubah lagi kalau sudah dikunci atau pesanan sudah selesai/dibatalkan
+    public function bolehCatatKonsultasi()
+    {
+        return ! $this->consultation?->locked_at && ! $this->status->is_final;
+    }
+
     public function statusHistories()
     {
         return $this->hasMany(OrderStatusHistory::class);

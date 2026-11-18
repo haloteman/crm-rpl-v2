@@ -33,7 +33,7 @@ class PesananMasukController extends Controller
 
     public function show(Order $order)
     {
-        $order->load('customer.customerProfile', 'service', 'status', 'references', 'statusHistories');
+        $order->load('customer.customerProfile', 'service', 'status', 'references', 'statusHistories', 'consultation');
 
         return view('pesanan-masuk.show', [
             'order' => $order,

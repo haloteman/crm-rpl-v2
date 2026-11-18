@@ -56,6 +56,34 @@
         </section>
     </div>
 
-    @include('pesanan.riwayat')
+    <div class="space-y-5">
+        <section class="card p-5">
+            <h2 class="font-semibold">Kesepakatan konsultasi</h2>
+
+            @if (auth()->user()->can('consult.note') && $order->bolehCatatKonsultasi())
+                <form method="POST" action="{{ route('konsultasi.simpan', $order) }}" class="mt-3">
+                    @csrf
+                    <label for="notes" class="block text-sm font-medium">Hasil konsultasi</label>
+                    <textarea id="notes" name="notes" rows="4" placeholder="Lingkup pekerjaan yang disepakati"
+                              class="field mt-1.5 @error('notes') border-lost @enderror">{{ old('notes', $order->consultation?->notes) }}</textarea>
+                    @error('notes') <p class="mt-1 text-sm text-lost">{{ $message }}</p> @enderror
+
+                    <label for="revision_terms" class="mt-4 block text-sm font-medium">Ketentuan revisi</label>
+                    <textarea id="revision_terms" name="revision_terms" rows="3" class="field mt-1.5">{{ old('revision_terms', $order->consultation?->revision_terms) }}</textarea>
+
+                    <button type="submit" class="btn-primary mt-4 w-full">Simpan Catatan</button>
+                    <p class="mt-2 text-xs text-slate-500">Boleh disimpan dulu. Status tetap Menunggu Konsultasi.</p>
+                </form>
+            @else
+                <p class="mt-1 text-xs text-slate-500">Diisi Owner · hanya-baca</p>
+                <h3 class="mt-3 text-sm font-medium">Hasil konsultasi</h3>
+                <p class="mt-1 whitespace-pre-line rounded-lg bg-thead px-3 py-2 text-sm">{{ $order->consultation?->notes ?? 'Belum diisi Owner.' }}</p>
+                <h3 class="mt-3 text-sm font-medium">Ketentuan revisi</h3>
+                <p class="mt-1 whitespace-pre-line rounded-lg bg-thead px-3 py-2 text-sm">{{ $order->consultation?->revision_terms ?? 'Belum diisi Owner.' }}</p>
+            @endif
+        </section>
+
+        @include('pesanan.riwayat')
+    </div>
 </div>
 @endsection
