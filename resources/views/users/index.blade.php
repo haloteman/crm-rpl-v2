@@ -93,6 +93,9 @@
                             <span class="rounded-md px-2 py-0.5 text-xs {{ in_array($user->getRoleNames()->first(), ['Owner', 'Super Admin']) ? 'bg-tint font-medium text-brand-dark' : 'bg-thead text-slate-500' }}">
                                 {{ $user->getRoleNames()->first() }}
                             </span>
+                            @if ($user->designerSkills->isNotEmpty())
+                                <span class="mt-1 block text-xs text-slate-500">{{ $user->designerSkills->pluck('serviceCategory.name')->implode(', ') }}</span>
+                            @endif
                         </td>
                         <td class="flex items-center justify-between gap-3 py-1 text-slate-500 md:table-cell md:px-5 md:py-3">
                             <span class="text-xs md:hidden">Login Terakhir</span>
@@ -224,7 +227,7 @@
                 <div class="flex items-start justify-between gap-3">
                     <div>
                         <h2 class="text-xl font-semibold">Tambah Akun</h2>
-                        <p class="mt-1 text-sm text-slate-500">Isi nama dan pilih role. NIP serta password sementara akan dibuat otomatis.</p>
+                        <p class="mt-1 text-sm text-slate-500">Isi nama dan pilih role (beserta keahlian jika Desainer). NIP serta password sementara akan dibuat otomatis.</p>
                     </div>
                     <button type="button" @click="modal = ''" aria-label="Tutup"
                             class="-mr-2 -mt-2 flex size-9 shrink-0 items-center justify-center rounded-full text-slate-400 hover:bg-thead">
@@ -232,7 +235,7 @@
                     </button>
                 </div>
 
-                <form method="POST" action="{{ route('users.store') }}" class="mt-5">
+                <form method="POST" action="{{ route('users.store') }}" class="mt-5" x-data="{ role: '{{ old('role_id') }}' }">
                     @csrf
                     <label for="name" class="block text-sm font-medium">Nama Lengkap</label>
                     <input id="name" name="name" type="text" value="{{ old('name') }}" placeholder="Contoh: Dinda Maharani"
@@ -244,13 +247,27 @@
                     @enderror
 
                     <label for="role_id" class="mt-4 block text-sm font-medium">Role</label>
-                    <select id="role_id" name="role_id" class="field mt-1.5 @error('role_id') border-lost @enderror">
+                    <select id="role_id" name="role_id" x-model="role" class="field mt-1.5 @error('role_id') border-lost @enderror">
                         <option value="">Pilih role</option>
                         @foreach ($pilihanRole as $role)
                             <option value="{{ $role->id }}" @selected(old('role_id') == $role->id)>{{ $role->name }}</option>
                         @endforeach
                     </select>
                     @error('role_id') <p class="mt-1 text-sm text-lost">{{ $message }}</p> @enderror
+
+                    <div x-show="role == '{{ $idDesainer }}'" x-cloak class="mt-4">
+                        <div class="text-sm font-medium">Keahlian <span class="font-normal text-slate-500">(opsional)</span></div>
+                        <div class="mt-1.5 grid grid-cols-2 gap-2">
+                            @foreach ($semuaKeahlian as $kategori)
+                                <label class="flex items-center gap-2 text-sm">
+                                    <input type="checkbox" name="keahlian[]" value="{{ $kategori->id }}" @checked(in_array($kategori->id, old('keahlian', [])))
+                                           class="size-4 rounded border-slate-300 accent-brand-dark">
+                                    {{ $kategori->name }}
+                                </label>
+                            @endforeach
+                        </div>
+                        @error('keahlian') <p class="mt-1 text-sm text-lost">{{ $message }}</p> @enderror
+                    </div>
 
                     <div class="mt-5 flex items-start gap-3 rounded-lg bg-tint px-4 py-3 text-brand-dark">
                         <x-icon name="shield-check" class="mt-0.5 size-5 shrink-0" />

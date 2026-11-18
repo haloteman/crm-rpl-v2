@@ -3,9 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
+use App\Models\ServiceCategory;
 use App\Models\User;
 use App\Services\CredentialGenerator;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 use Spatie\Permission\Models\Permission;
 
 class DatabaseSeeder extends Seeder
@@ -70,6 +72,16 @@ class DatabaseSeeder extends Seeder
             ]);
 
             $akun->assignRole($user['role']);
+        }
+
+        $kategori = ['Desain Logo', 'Desain Kaos', 'Editing Video', 'Editing Foto', 'Poster', 'Banner', 'Flyer'];
+
+        foreach ($kategori as $urutan => $nama) {
+            ServiceCategory::create([
+                'name' => $nama,
+                'slug' => Str::slug($nama),
+                'sort_order' => $urutan + 1,
+            ]);
         }
     }
 }

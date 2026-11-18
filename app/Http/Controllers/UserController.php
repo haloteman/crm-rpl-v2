@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CredentialIssuance;
 use App\Models\Role;
+use App\Models\ServiceCategory;
 use App\Models\User;
 use App\Services\CredentialGenerator;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $query = User::where('user_type', User::INTERNAL)
-            ->with('roles', 'internalProfile')
+            ->with('roles', 'internalProfile', 'designerSkills.serviceCategory')
             ->orderBy('name');
 
         if ($request->filled('cari')) {
@@ -35,20 +36,27 @@ class UserController extends Controller
                 'totalAkun' => User::where('user_type', User::INTERNAL)->count(),
                 'semuaRole' => Role::where('name', '!=', Role::CUSTOMER)->orderBy('id')->get(),
                 'pilihanRole' => $this->pilihanRole(),
+                'semuaKeahlian' => ServiceCategory::where('is_active', true)->orderBy('sort_order')->get(),
+                'idDesainer' => Role::findByName(Role::DESAINER)->id,
             ])
             ->header('Cache-Control', 'no-store');
     }
 
     public function store(Request $request)
     {
+        $idDesainer = Role::findByName(Role::DESAINER)->id;
+
         $request->validate([
             'name' => 'required|max:100',
             'role_id' => ['required', Rule::in($this->pilihanRole()->pluck('id'))],
+            'keahlian' => 'nullable|array',
+            'keahlian.*' => 'exists:service_categories,id',
         ], [
             'name.required' => 'Nama lengkap wajib diisi',
             'name.max' => 'Nama lengkap maksimal 100 karakter',
             'role_id.required' => 'Role wajib dipilih',
             'role_id.in' => 'Role tidak tersedia',
+            'keahlian.*.exists' => 'Keahlian tidak tersedia',
         ]);
 
         $password = CredentialGenerator::generatePassword();
@@ -66,6 +74,12 @@ class UserController extends Controller
         ]);
 
         $user->assignRole(Role::findById($request->role_id));
+
+        if ($request->role_id == $idDesainer && $request->filled('keahlian')) {
+            foreach ($request->keahlian as $kategoriId) {
+                $user->designerSkills()->create(['service_category_id' => $kategoriId]);
+            }
+        }
 
         $user->credentialIssuances()->create([
             'issued_by' => auth()->id(),
