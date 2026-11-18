@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
@@ -38,6 +39,14 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
         Route::get('/profil/ubah', [ProfilController::class, 'edit'])->name('profil.edit');
         Route::post('/profil/ubah', [ProfilController::class, 'update'])->name('profil.update');
+    });
+
+    Route::middleware('permission:service.manage')->group(function () {
+        Route::get('/katalog-layanan', [KatalogController::class, 'index'])->name('katalog.index');
+        Route::get('/katalog-layanan/tambah', [KatalogController::class, 'create'])->name('katalog.create');
+        Route::post('/katalog-layanan', [KatalogController::class, 'store'])->name('katalog.store');
+        Route::get('/katalog-layanan/{layanan}/ubah', [KatalogController::class, 'edit'])->name('katalog.edit');
+        Route::post('/katalog-layanan/{layanan}/ubah', [KatalogController::class, 'update'])->name('katalog.update');
     });
 
     Route::middleware('permission:user.view')->group(function () {

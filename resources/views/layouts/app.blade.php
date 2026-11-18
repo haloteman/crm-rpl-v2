@@ -5,6 +5,7 @@
         ['route' => 'beranda', 'label' => 'Beranda', 'icon' => 'dashboard'],
         ['route' => 'profil.show', 'label' => 'Profil', 'icon' => 'users', 'match' => 'profil.*', 'role' => 'Customer'],
         ['route' => 'pelanggan.index', 'label' => 'Data Pelanggan', 'icon' => 'customer', 'match' => 'pelanggan.*', 'permission' => 'customer.view'],
+        ['route' => 'katalog.index', 'label' => 'Katalog Layanan', 'icon' => 'folder', 'match' => 'katalog.*', 'permission' => 'service.manage'],
         ['route' => 'users.index', 'label' => 'User Management', 'icon' => 'user-cog', 'match' => 'users.*', 'permission' => 'user.view'],
     ];
 

@@ -94,7 +94,7 @@
                                 {{ $user->getRoleNames()->first() }}
                             </span>
                             @if ($user->designerSkills->isNotEmpty())
-                                <span class="mt-1 block text-xs text-slate-500">{{ $user->designerSkills->pluck('serviceCategory.name')->implode(', ') }}</span>
+                                <span class="mt-1 block text-xs text-slate-500">{{ $user->designerSkills->pluck('service.name')->implode(', ') }}</span>
                             @endif
                         </td>
                         <td class="flex items-center justify-between gap-3 py-1 text-slate-500 md:table-cell md:px-5 md:py-3">

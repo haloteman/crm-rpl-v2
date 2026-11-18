@@ -3,7 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Role;
-use App\Models\ServiceCategory;
+use App\Models\Service;
+use App\Models\SystemSetting;
 use App\Models\User;
 use App\Services\CredentialGenerator;
 use Illuminate\Database\Seeder;
@@ -74,14 +75,28 @@ class DatabaseSeeder extends Seeder
             $akun->assignRole($user['role']);
         }
 
-        $kategori = ['Desain Logo', 'Desain Kaos', 'Editing Video', 'Editing Foto', 'Poster', 'Banner', 'Flyer'];
+        $layanans = [
+            ['Desain Logo', 'Logo yang mewakili identitas usaha Anda.'],
+            ['Desain Kaos', 'Desain kaos untuk komunitas, acara, atau merchandise.'],
+            ['Editing Video', 'Penyuntingan video untuk promosi dan media sosial.'],
+            ['Editing Foto', 'Retouch dan penyuntingan foto produk maupun acara.'],
+            ['Poster', 'Poster informatif dan menarik untuk berbagai kebutuhan.'],
+            ['Flyer', 'Flyer promosi yang ringkas dan mudah dibaca.'],
+            ['Banner', 'Banner cetak maupun digital untuk acara dan promosi.'],
+        ];
 
-        foreach ($kategori as $urutan => $nama) {
-            ServiceCategory::create([
+        foreach ($layanans as $urutan => [$nama, $ringkasan]) {
+            Service::create([
                 'name' => $nama,
                 'slug' => Str::slug($nama),
+                'short_description' => $ringkasan,
+                'workflow_steps' => ['Konsultasi kebutuhan', 'Pembayaran DP', 'Pengerjaan desain', 'Revisi', 'Hasil akhir'],
                 'sort_order' => $urutan + 1,
             ]);
         }
+
+        // nomor contoh, ganti dengan nomor WhatsApp asli perusahaan
+        SystemSetting::create(['setting_key' => 'wa_admin', 'setting_value' => '6281234567890', 'description' => 'Nomor WhatsApp Admin']);
+        SystemSetting::create(['setting_key' => 'wa_owner', 'setting_value' => '6281234567891', 'description' => 'Nomor WhatsApp Owner']);
     }
 }

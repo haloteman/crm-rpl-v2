@@ -8,12 +8,12 @@ class DesignerSkill extends Model
 {
     protected $fillable = [
         'user_id',
-        'service_category_id',
+        'service_id',
         'proficiency',
     ];
 
-    public function serviceCategory()
+    public function service()
     {
-        return $this->belongsTo(ServiceCategory::class);
+        return $this->belongsTo(Service::class);
     }
 }
