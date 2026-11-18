@@ -3,6 +3,7 @@
 @php
     $menu = [
         ['route' => 'beranda', 'label' => 'Beranda', 'icon' => 'dashboard'],
+        ['route' => 'users.index', 'label' => 'User Management', 'icon' => 'user-cog', 'match' => 'users.*', 'permission' => 'user.view'],
     ];
 
     $menu = array_filter($menu, fn ($item) => ! isset($item['permission']) || auth()->user()->can($item['permission']));

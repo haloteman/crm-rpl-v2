@@ -34,6 +34,9 @@ class PasswordController extends Controller
             'password_changed_at' => now(),
         ]);
 
+        // password sementara dari sistem sudah tidak berlaku lagi
+        $user->credentialIssuances()->whereNull('consumed_at')->update(['consumed_at' => now()]);
+
         return redirect()->route('beranda')->with('status', 'Password berhasil diubah');
     }
 }

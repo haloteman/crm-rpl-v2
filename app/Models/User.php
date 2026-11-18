@@ -45,4 +45,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(InternalProfile::class);
     }
+
+    public function credentialIssuances()
+    {
+        return $this->hasMany(CredentialIssuance::class);
+    }
 }
