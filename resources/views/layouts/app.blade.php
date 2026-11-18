@@ -3,6 +3,7 @@
 @php
     $menu = [
         ['route' => 'beranda', 'label' => 'Beranda', 'icon' => 'dashboard'],
+        ['route' => 'pelanggan.index', 'label' => 'Data Pelanggan', 'icon' => 'customer', 'match' => 'pelanggan.*', 'permission' => 'customer.view'],
         ['route' => 'users.index', 'label' => 'User Management', 'icon' => 'user-cog', 'match' => 'users.*', 'permission' => 'user.view'],
     ];
 
