@@ -97,8 +97,8 @@ class DatabaseSeeder extends Seeder
         }
 
         // nomor contoh, ganti dengan nomor WhatsApp asli perusahaan
-        SystemSetting::create(['setting_key' => 'wa_admin', 'setting_value' => '6281234567890', 'description' => 'Nomor WhatsApp Admin']);
-        SystemSetting::create(['setting_key' => 'wa_owner', 'setting_value' => '6281234567891', 'description' => 'Nomor WhatsApp Owner']);
+        SystemSetting::create(['setting_key' => 'wa_admin', 'setting_value' => '6285143334354', 'description' => 'Nomor WhatsApp Admin']);
+        SystemSetting::create(['setting_key' => 'wa_owner', 'setting_value' => '6285143334354', 'description' => 'Nomor WhatsApp Owner']);
 
         // kode, label internal, label untuk customer, status berikutnya yang boleh
         $statusPesanan = [
