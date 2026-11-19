@@ -3,7 +3,8 @@
 @section('heading', 'Data Pelanggan')
 
 @section('content')
-<h1 class="page-title">Data Pelanggan</h1>
+<p class="eyebrow">Pelanggan</p>
+<h1 class="page-title mt-1">Data pelanggan.</h1>
 <p class="page-sub">Pelanggan dan lead yang mendaftar lewat website.</p>
 
 <section class="card mt-5">
@@ -22,7 +23,7 @@
 
     {{-- tabel di layar >= md, tumpuk jadi kartu di HP --}}
     <table class="mt-4 block w-full text-left text-sm md:table">
-        <thead class="hidden bg-thead text-xs text-slate-500 md:table-header-group">
+        <thead class="hidden bg-thead text-[11px] font-bold uppercase tracking-[0.1em] md:table-header-group">
             <tr>
                 <th class="px-5 py-3 font-medium">Nama</th>
                 <th class="px-5 py-3 font-medium">Kontak</th>

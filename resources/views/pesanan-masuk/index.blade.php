@@ -3,7 +3,8 @@
 @section('heading', 'Pesanan')
 
 @section('content')
-<h1 class="page-title">Pesanan masuk.</h1>
+<p class="eyebrow">Layanan dan Pesanan</p>
+<h1 class="page-title mt-1">Pesanan masuk.</h1>
 <p class="page-sub">Pantau pesanan yang masuk dan tindak lanjuti.</p>
 
 <form method="GET" action="{{ route('pesanan-masuk.index') }}" class="mt-5 flex flex-col gap-3 sm:flex-row">
@@ -28,7 +29,7 @@
 
 <section class="card mt-4">
     <table class="block w-full text-left text-sm md:table">
-        <thead class="hidden bg-thead text-xs text-slate-500 md:table-header-group">
+        <thead class="hidden bg-thead text-[11px] font-bold uppercase tracking-[0.1em] md:table-header-group">
             <tr>
                 <th class="px-5 py-3 font-medium">Kode</th>
                 <th class="px-5 py-3 font-medium">Customer</th>

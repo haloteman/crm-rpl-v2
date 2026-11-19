@@ -9,7 +9,8 @@
     {{-- judul + tombol tambah --}}
     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-            <h1 class="page-title">Manajemen Akun</h1>
+            <p class="eyebrow">Pengaturan</p>
+            <h1 class="page-title mt-1">Manajemen akun.</h1>
             <p class="page-sub">Kelola akun dan akses pengguna internal PT Media Creative.</p>
         </div>
         <button type="button" @click="modal = 'tambah'" class="btn-primary w-full sm:w-auto">
@@ -62,7 +63,7 @@
 
         {{-- tabel di layar >= md, tumpuk jadi kartu di HP --}}
         <table class="mt-4 block w-full text-left text-sm md:table">
-            <thead class="hidden bg-thead text-xs text-slate-500 md:table-header-group">
+            <thead class="hidden bg-thead text-[11px] font-bold uppercase tracking-[0.1em] md:table-header-group">
                 <tr>
                     <th class="px-5 py-3 font-medium">Nama Lengkap</th>
                     <th class="px-5 py-3 font-medium">NIP</th>
