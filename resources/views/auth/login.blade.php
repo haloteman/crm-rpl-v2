@@ -2,9 +2,8 @@
 @section('title', 'Login')
 
 @section('content')
-<p class="text-xs font-semibold uppercase tracking-wide text-brand-dark">Selamat datang</p>
-<h1 class="mt-1 text-[28px] font-semibold leading-tight">Login ke akun Anda</h1>
-<p class="mt-2 text-sm text-slate-500">Masukkan NIP dan password untuk mengakses CRM PT Media Creative.</p>
+<h1 class="text-[32px] font-extrabold leading-tight">Login</h1>
+<p class="mt-2 text-sm text-slate-600">Owner, Super Admin, Admin, Kepala Staf Desainer, dan Desainer.</p>
 
 <form method="POST" action="{{ route('login') }}" novalidate class="mt-7" x-data="{ lihat: false }">
     @csrf
@@ -34,13 +33,13 @@
         </div>
     @endif
 
-    <button type="submit" class="btn-primary mt-6 w-full py-3.5">
-        Login <x-icon name="arrow-right" class="size-4" />
+    <button type="submit" class="btn-dark mt-6 w-full py-3.5">
+        Masuk
     </button>
 
-    <p class="mt-5 flex items-center gap-2 text-xs text-slate-500">
-        <x-icon name="question-circle" class="size-4 shrink-0" />
-        Lupa password? Minta Super Admin untuk mereset password Anda.
+    <p class="mt-5 flex items-start gap-2 rounded-xl border-2 border-ink bg-violet/10 px-4 py-3 text-sm">
+        <x-icon name="info" class="mt-0.5 size-4 shrink-0" />
+        <span><b>Lupa password?</b> Hubungi Super Admin untuk meminta reset.</span>
     </p>
 
     <p class="mt-3 text-center text-sm text-slate-500">
