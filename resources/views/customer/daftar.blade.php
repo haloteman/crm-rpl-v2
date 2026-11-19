@@ -25,7 +25,7 @@
     @error('phone')
         <p class="mt-1 text-sm text-lost">{{ $message }}</p>
     @else
-        <p class="mt-1 text-xs text-slate-500">Disimpan dalam format internasional (+62) agar tautan WhatsApp berfungsi.</p>
+        <p class="mt-1 text-xs text-slate-500"></p>
     @enderror
 
     <label for="institution" class="mt-4 block text-sm font-semibold">Instansi <span class="font-normal text-slate-500">(opsional)</span></label>
