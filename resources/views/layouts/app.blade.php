@@ -2,12 +2,12 @@
 
 @php
     $menu = [
-        ['route' => 'beranda', 'label' => 'Beranda', 'icon' => 'dashboard'],
-        ['route' => 'pesanan.index', 'label' => 'Pesanan Saya', 'icon' => 'penawaran', 'match' => 'pesanan.*', 'permission' => 'order.own'],
-        ['route' => 'pesanan-masuk.index', 'label' => 'Pesanan', 'icon' => 'penawaran', 'match' => 'pesanan-masuk.*', 'permission' => 'order.view'],
-        ['route' => 'profil.show', 'label' => 'Profil', 'icon' => 'users', 'match' => 'profil.*', 'role' => 'Customer'],
+        ['route' => 'beranda', 'label' => 'Dashboard', 'icon' => 'dashboard'],
+        ['route' => 'pesanan.index', 'label' => 'Pesanan Saya', 'icon' => 'shopping-bag', 'match' => 'pesanan.*', 'permission' => 'order.own'],
+        ['route' => 'profil.show', 'label' => 'Pengaturan', 'icon' => 'settings', 'match' => 'profil.*', 'role' => 'Customer'],
         ['route' => 'pelanggan.index', 'label' => 'Data Pelanggan', 'icon' => 'customer', 'match' => 'pelanggan.*', 'permission' => 'customer.view'],
         ['route' => 'katalog.index', 'label' => 'Katalog Layanan', 'icon' => 'folder', 'match' => 'katalog.*', 'permission' => 'service.manage'],
+        ['route' => 'pesanan-masuk.index', 'label' => 'Pesanan Masuk', 'icon' => 'penawaran', 'match' => 'pesanan-masuk.*', 'permission' => 'order.view'],
         ['route' => 'users.index', 'label' => 'User Management', 'icon' => 'user-cog', 'match' => 'users.*', 'permission' => 'user.view'],
     ];
 
@@ -27,92 +27,105 @@
 @endphp
 
 @section('body')
-<div x-data="{ sidebar: false }" class="min-h-screen">
-    {{-- overlay sidebar di layar kecil --}}
-    <div x-show="sidebar" x-cloak @click="sidebar = false" class="fixed inset-0 z-30 bg-slate-900/50 lg:hidden"></div>
+@if ($me->hasRole('Customer'))
+    {{-- portal customer: navbar di atas --}}
+    <div x-data="{ menu: false }" class="min-h-screen">
+        <header class="sticky top-0 z-20 border-b-2 border-ink bg-paper">
+            <div class="mx-auto flex h-16 max-w-6xl items-center gap-6 px-4">
+                <a href="{{ route('website.beranda') }}"><x-logo /></a>
 
-    <aside :class="sidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
-           class="fixed inset-y-0 left-0 z-40 flex w-[252px] flex-col bg-brand text-white transition-transform">
-        <div class="px-6 pt-6">
-            <x-logo />
-        </div>
+                <nav class="hidden items-center gap-1 text-sm md:flex">
+                    @foreach ($menu as $item)
+                        @php $active = request()->routeIs($item['match'] ?? $item['route']); @endphp
+                        <a href="{{ route($item['route']) }}" @if ($active) aria-current="page" @endif
+                           class="rounded-lg border-2 px-3 py-1.5 font-semibold {{ $active ? 'border-ink bg-lime shadow-hard-sm' : 'border-transparent hover:border-ink' }}">{{ $item['label'] }}</a>
+                    @endforeach
+                </nav>
 
-        <div class="mt-6 px-6 text-[11px] font-semibold uppercase tracking-wider text-white/80">Ruang kerja</div>
-
-        <nav class="mt-3 flex-1 space-y-1 overflow-y-auto px-[18px] pb-6">
-            @foreach ($menu as $item)
-                @php $active = request()->routeIs($item['match'] ?? $item['route']); @endphp
-                <a href="{{ route($item['route']) }}" @if ($active) aria-current="page" @endif
-                   class="flex h-11 items-center gap-3 rounded-lg px-3 text-[13px] {{ $active ? 'bg-white font-semibold text-brand-dark' : 'font-medium text-white/90 hover:bg-white/10' }}">
-                    <x-icon :name="$item['icon']" class="size-5 shrink-0" />
-                    <span class="flex-1">{{ $item['label'] }}</span>
-                    @if ($active) <span class="size-1.5 rounded-full bg-brand-dark"></span> @endif
-                </a>
-            @endforeach
-        </nav>
-
-        <div class="space-y-1 px-[18px] pb-6">
-            <a href="{{ route('password.edit') }}" class="flex h-10 items-center gap-3 rounded-lg px-3 text-[13px] text-white/90 hover:bg-white/10">
-                <x-icon name="key" class="size-5" /> Ganti password
-            </a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left text-[13px] text-white/90 hover:bg-white/10">
-                    <x-icon name="logout" class="size-5" /> Keluar
-                </button>
-            </form>
-        </div>
-    </aside>
-
-    <div class="lg:pl-[252px]">
-        <header class="sticky top-0 z-20 flex h-[88px] items-center gap-3 border-b bg-white px-4 sm:px-8">
-            <button type="button" class="lg:hidden" @click="sidebar = true" aria-label="Buka menu"><x-icon name="menu" class="size-6" /></button>
-
-            <nav aria-label="Breadcrumb" class="flex min-w-0 items-center gap-2 text-sm">
-                <span class="hidden text-slate-500 sm:inline">Ruang kerja</span>
-                <x-icon name="chevron-right" class="hidden size-4 shrink-0 text-slate-400 sm:block" />
-                <span class="truncate font-semibold">@yield('heading')</span>
-            </nav>
-
-
-            {{-- profil pengguna --}}
-            <div x-data="{ open: false }" @click.outside="open = false" class="relative ml-auto">
-                <button type="button" @click="open = ! open" class="flex items-center gap-3 rounded-lg p-1 text-left">
-                    <span class="flex size-10 shrink-0 items-center justify-center rounded-full bg-tint text-xs font-bold text-brand-dark">{{ $inisial }}</span>
-                    <span class="hidden sm:block">
-                        <span class="block max-w-44 truncate text-sm font-semibold leading-tight">{{ $me->name }}</span>
-                        <span class="mt-0.5 inline-block rounded-md bg-tint px-2 py-0.5 text-[11px] font-medium text-brand-dark">{{ $me->getRoleNames()->first() }}</span>
-                    </span>
-                    <x-icon name="chevron-down" class="size-4 text-slate-500" />
-                </button>
-                <div x-show="open" x-cloak x-transition.opacity
-                     class="absolute right-0 mt-2 w-52 rounded-xl border bg-white p-1.5 shadow-lg">
-                    <div class="px-3 py-2 sm:hidden">
-                        <div class="truncate text-sm font-semibold">{{ $me->name }}</div>
-                        <div class="text-xs text-slate-500">{{ $me->getRoleNames()->first() }}</div>
-                    </div>
-                    <a href="{{ route('password.edit') }}" class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-thead">
-                        <x-icon name="key" class="size-4 text-slate-500" /> Ganti password
-                    </a>
+                <div class="ml-auto hidden items-center gap-3 md:flex">
+                    <span class="text-sm font-semibold">{{ $me->name }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-sm hover:bg-thead">
-                            <x-icon name="logout" class="size-4 text-slate-500" /> Keluar
-                        </button>
+                        <button type="submit" class="btn-outline py-1.5">Keluar</button>
                     </form>
                 </div>
+
+                <button type="button" class="ml-auto md:hidden" @click="menu = ! menu" aria-label="Buka menu"><x-icon name="menu" class="size-6" /></button>
             </div>
+
+            <nav x-show="menu" x-cloak class="flex flex-col gap-1 border-t-2 border-ink px-4 py-3 text-sm md:hidden">
+                @foreach ($menu as $item)
+                    <a href="{{ route($item['route']) }}" class="rounded-lg px-3 py-2 font-semibold">{{ $item['label'] }}</a>
+                @endforeach
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn-outline mt-2 w-full">Keluar</button>
+                </form>
+            </nav>
         </header>
 
-        <main class="p-4 sm:p-8">
-            @if (session('status'))
-                <div class="mb-5 flex items-start gap-3 rounded-lg border border-won/20 bg-won-tint px-4 py-3 text-sm text-won">
-                    <x-icon name="check-circle" class="mt-0.5 size-5 shrink-0" />
-                    <p>{{ session('status') }}</p>
-                </div>
-            @endif
+        <main class="mx-auto max-w-6xl px-4 py-8">
+            @include('layouts.status')
             @yield('content')
         </main>
     </div>
-</div>
+@else
+    {{-- CRM internal: sidebar di kiri --}}
+    <div x-data="{ sidebar: false }" class="min-h-screen">
+        <div x-show="sidebar" x-cloak @click="sidebar = false" class="fixed inset-0 z-30 bg-ink/50 lg:hidden"></div>
+
+        <aside :class="sidebar ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+               class="fixed inset-y-0 left-0 z-40 flex w-[256px] flex-col border-r-2 border-ink bg-paper transition-transform">
+            <div class="px-6 pt-6">
+                <a href="{{ route('beranda') }}"><x-logo /></a>
+            </div>
+
+            <nav class="mt-6 flex-1 overflow-y-auto px-4 pb-6">
+                <div class="mb-2 px-2 text-[11px] font-bold uppercase tracking-[0.12em] text-slate-600">Menu</div>
+                @foreach ($menu as $item)
+                    @php $active = request()->routeIs($item['match'] ?? $item['route']); @endphp
+                    <a href="{{ route($item['route']) }}" @if ($active) aria-current="page" @endif
+                       class="mb-1 flex h-11 items-center gap-3 rounded-xl border-2 px-3 text-sm {{ $active ? 'border-ink bg-lime font-bold shadow-hard-sm' : 'border-transparent font-medium hover:border-ink' }}">
+                        <x-icon :name="$item['icon']" class="size-5 shrink-0" />
+                        <span class="flex-1">{{ $item['label'] }}</span>
+                    </a>
+                @endforeach
+            </nav>
+
+            {{-- kartu pengguna --}}
+            <div class="m-4 rounded-2xl border-2 border-ink bg-white p-4">
+                <div class="flex items-center gap-3">
+                    <span class="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-ink bg-lime text-xs font-bold">{{ $inisial }}</span>
+                    <div class="min-w-0">
+                        <div class="truncate text-sm font-bold">{{ $me->name }}</div>
+                        <div class="font-mono text-xs text-slate-600">{{ $me->internalProfile?->nip }}</div>
+                    </div>
+                </div>
+                <span class="badge badge-green mt-3">{{ $me->getRoleNames()->first() }}</span>
+                <a href="{{ route('password.edit') }}" class="btn-outline mt-3 w-full py-2 text-[13px]">
+                    <x-icon name="key" class="size-4" /> Ganti password
+                </a>
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" class="btn-outline mt-2 w-full py-2 text-[13px]">
+                        <x-icon name="logout" class="size-4" /> Keluar
+                    </button>
+                </form>
+            </div>
+        </aside>
+
+        <div class="lg:pl-[256px]">
+            <header class="sticky top-0 z-20 flex h-12 items-center gap-3 border-b-2 border-ink bg-paper px-4 text-[13px] sm:px-8">
+                <button type="button" class="lg:hidden" @click="sidebar = true" aria-label="Buka menu"><x-icon name="menu" class="size-6" /></button>
+                <span class="hidden items-center gap-2 sm:flex"><x-icon name="clock" class="size-4" /> Sesi aktif. Berakhir otomatis setelah 12 jam tanpa aktivitas.</span>
+                <span class="ml-auto text-slate-600">{{ now()->translatedFormat('l, j F Y') }}</span>
+            </header>
+
+            <main class="p-4 sm:p-8">
+                @include('layouts.status')
+                @yield('content')
+            </main>
+        </div>
+    </div>
+@endif
 @endsection

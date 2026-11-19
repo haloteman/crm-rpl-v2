@@ -1,11 +1,7 @@
-<div {{ $attributes->merge(['class' => 'flex items-center gap-3 text-white']) }}>
-    <span class="flex size-10 shrink-0 items-center justify-center rounded-[10px] bg-white">
-        <svg viewBox="0 0 24 24" class="size-6" fill="none" aria-hidden="true">
-            <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5V8h-5.25v11h-3.5V8H4V5.5Z" fill="#235ad9" />
-        </svg>
+<div {{ $attributes->merge(['class' => 'flex items-center gap-2.5']) }}>
+    <span class="relative size-8 shrink-0" aria-hidden="true">
+        <span class="absolute inset-0 rounded-full border-2 border-ink bg-lime"></span>
+        <span class="absolute -bottom-0.5 -right-0.5 size-3.5 rounded-[4px] border-2 border-ink bg-violet"></span>
     </span>
-    <span class="leading-tight">
-        <span class="block text-lg font-bold tracking-tight">Media Creative</span>
-        <span class="block text-[10px] uppercase tracking-wide text-white/70">CRM PT Media Creative</span>
-    </span>
+    <span class="font-display text-xl font-extrabold tracking-tight">Media Creative</span>
 </div>

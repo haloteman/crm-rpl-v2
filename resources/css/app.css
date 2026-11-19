@@ -8,58 +8,76 @@
 @theme {
     --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-display: 'Bricolage Grotesque', 'Inter', ui-sans-serif, system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-    --color-brand: #1247b2;       /* sidebar + latar login */
-    --color-brand-dark: #235ad9;  /* tombol utama, link, aksen biru */
+    --color-canvas: #f5f2eb;      /* latar krem */
+    --color-sand: #e9e1d4;        /* latar pasir (section selang-seling) */
+    --color-paper: #faf8f3;       /* sidebar, header tabel */
+    --color-ink: #121826;         /* teks utama, border tegas */
+    --color-line: #d9d2c5;        /* garis tipis antar baris */
+    --color-lime: #d7f15a;        /* aksen utama */
+    --color-lime-tint: #eef8c4;
+    --color-violet: #4f36d8;      /* eyebrow, angka */
+    --color-sun: #ffd23f;         /* kuning */
+    --color-coral: #f0654d;       /* terlambat / hapus */
 
-    --color-canvas: #f5f7fb;      /* latar halaman */
-    --color-thead: #f8fafd;       /* header tabel, kotak info netral */
-    --color-tint: #edf3ff;        /* latar biru muda (badge, banner, avatar) */
-    --color-ink: #172b4d;         /* teks utama / judul */
-    --color-line: #e3e9f2;        /* garis & border */
+    /* nama lama tetap dipakai di view */
+    --color-brand-dark: #4f36d8;
+    --color-thead: #faf8f3;
+    --color-tint: #eef8c4;
+    --color-won: #2f7a2a;
+    --color-won-tint: #e6f4d7;
+    --color-warn: #8a5a00;
+    --color-warn-tint: #fff1c2;
+    --color-lost: #c23a26;
+    --color-lost-tint: #fde4df;
 
-    --color-won: #168165;
-    --color-won-tint: #eaf7f1;
-    --color-warn: #a56813;
-    --color-warn-tint: #fff5e3;
-    --color-lost: #c63741;
-    --color-lost-tint: #fff0f1;
+    --shadow-hard: 4px 4px 0 0 #121826;
+    --shadow-hard-sm: 3px 3px 0 0 #121826;
 }
 
 [x-cloak] { display: none !important; }
 
 @layer base {
-    /* Tailwind v4: border default-nya hitam, samakan dengan garis Figma */
     *, ::after, ::before, ::backdrop, ::file-selector-button { border-color: var(--color-line); }
 
-    body { @apply bg-canvas text-ink antialiased; }
+    body {
+        @apply bg-canvas text-ink antialiased;
+        background-image: radial-gradient(rgb(18 24 38 / 0.12) 1px, transparent 1px);
+        background-size: 22px 22px;
+    }
+
+    h1, h2, h3, .font-display { font-family: var(--font-display); letter-spacing: -0.03em; }
 }
 
 @layer components {
-    .card { @apply rounded-xl border bg-white; }
+    .card { @apply rounded-2xl border-2 border-ink bg-white shadow-hard; }
+    .card:has(table) { @apply overflow-hidden; }
 
-    /* ukuran sesuai Figma: tinggi input/tombol 40px, teks 13px */
-    .field { @apply w-full rounded-lg border bg-white px-3.5 py-[9px] text-[13px] text-ink outline-none placeholder:text-slate-400 focus:border-brand-dark focus:ring-2 focus:ring-brand-dark/20; }
+    .field { @apply w-full rounded-xl border-2 border-ink bg-white px-3.5 py-2.5 text-sm text-ink outline-none placeholder:text-slate-400 focus:ring-4 focus:ring-lime; }
 
-    .btn-primary { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-brand-dark px-3.5 py-2.5 text-[13px] font-semibold text-white hover:bg-brand disabled:opacity-60; }
-    .btn-outline { @apply inline-flex items-center justify-center gap-2 rounded-lg border bg-white px-3.5 py-2.5 text-[13px] font-semibold text-ink hover:bg-thead disabled:opacity-60; }
-    .btn-danger { @apply inline-flex items-center justify-center gap-2 rounded-lg bg-lost px-3.5 py-2.5 text-[13px] font-semibold text-white hover:opacity-90 disabled:opacity-60; }
+    .btn, .btn-primary, .btn-dark, .btn-outline, .btn-danger { @apply inline-flex items-center justify-center gap-2 rounded-xl border-2 border-ink px-4 py-2.5 text-sm font-bold shadow-hard-sm transition hover:-translate-x-px hover:-translate-y-px active:translate-x-0.5 active:translate-y-0.5 active:shadow-none disabled:pointer-events-none disabled:border-slate-400 disabled:bg-slate-400 disabled:text-white disabled:shadow-none; }
+    .btn-primary { @apply bg-lime text-ink; }
+    .btn-dark { @apply bg-ink text-white shadow-[3px_3px_0_0_var(--color-violet)]; }
+    .btn-outline { @apply bg-white text-ink; }
+    .btn-danger { @apply bg-coral text-white; }
 
-    .page-title { @apply text-2xl font-bold leading-tight sm:text-[26px]; }
-    .page-sub { @apply mt-1 text-[13px] text-slate-500; }
-    .eyebrow { @apply text-xs font-semibold uppercase tracking-wide text-brand-dark; }
+    .page-title { @apply font-display text-3xl font-extrabold leading-tight sm:text-[40px]; }
+    .page-sub { @apply mt-1 text-sm text-slate-600; }
+    .eyebrow { @apply text-xs font-bold uppercase tracking-[0.12em] text-violet; }
+    .mark { @apply rounded-lg bg-lime px-1.5; box-decoration-break: clone; }
 
-    .badge { @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-medium; }
-    .badge-blue { @apply bg-tint text-brand-dark; }
-    .badge-amber { @apply bg-warn-tint text-warn; }
-    .badge-green { @apply bg-won-tint text-won; }
+    .badge { @apply inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border-[1.5px] border-ink px-2.5 py-0.5 text-[11px] font-bold; }
+    .badge-blue { @apply bg-violet/15 text-ink; }
+    .badge-amber { @apply bg-warn-tint text-ink; }
+    .badge-green { @apply bg-lime text-ink; }
     .badge-red { @apply bg-lost-tint text-lost; }
-    .badge-purple { @apply bg-violet-50 text-violet-700; }
-    .badge-gray { @apply bg-slate-100 text-slate-600; }
+    .badge-purple { @apply bg-violet text-white; }
+    .badge-gray { @apply bg-paper text-slate-700; }
 
-    .copy-chip { @apply inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 text-xs font-medium text-brand-dark hover:bg-tint; }
+    .copy-chip { @apply inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 font-mono text-xs font-medium text-ink hover:bg-lime; }
 
-    .pager-btn { @apply inline-flex size-[30px] items-center justify-center rounded-lg border text-xs text-slate-500 hover:bg-thead; }
-    .pager-btn-active { @apply border-transparent bg-tint font-semibold text-brand-dark hover:bg-tint; }
+    .pager-btn { @apply inline-flex size-[32px] items-center justify-center rounded-lg border-2 border-ink bg-white text-xs font-bold hover:bg-lime; }
+    .pager-btn-active { @apply bg-ink text-white hover:bg-ink; }
 }

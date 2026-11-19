@@ -12,38 +12,39 @@
 
 @section('body')
 <div x-data="{ menu: false }" class="flex min-h-screen flex-col">
-    <header class="border-b bg-white">
+    <header class="sticky top-0 z-20 border-b-2 border-ink bg-paper">
         <div class="mx-auto flex h-16 max-w-6xl items-center justify-between gap-4 px-4">
-            <a href="{{ route('website.beranda') }}" class="font-bold">Media Creative</a>
+            <a href="{{ route('website.beranda') }}"><x-logo /></a>
 
             <nav class="hidden items-center gap-1 text-sm md:flex">
                 @foreach ($menu as $item)
-                    <a href="{{ route($item['route']) }}"
-                       class="rounded-lg px-3 py-2 {{ request()->routeIs($item['match'] ?? $item['route']) ? 'bg-tint font-semibold' : 'hover:bg-thead' }}">{{ $item['label'] }}</a>
+                    @php $active = request()->routeIs($item['match'] ?? $item['route']); @endphp
+                    <a href="{{ route($item['route']) }}" @if ($active) aria-current="page" @endif
+                       class="rounded-lg border-2 px-3 py-1.5 font-semibold {{ $active ? 'border-ink bg-lime shadow-hard-sm' : 'border-transparent hover:border-ink' }}">{{ $item['label'] }}</a>
                 @endforeach
             </nav>
 
             <div class="hidden items-center gap-2 md:flex">
                 @auth
-                    <a href="{{ route('beranda') }}" class="btn-primary">Panel Saya</a>
+                    <a href="{{ route('beranda') }}" class="btn-dark py-1.5">Panel Saya</a>
                 @else
-                    <a href="{{ route('customer.login') }}" class="btn-outline">Masuk</a>
-                    <a href="{{ route('customer.register') }}" class="btn-primary">Daftar</a>
+                    <a href="{{ route('customer.login') }}" class="btn-outline py-1.5">Masuk</a>
+                    <a href="{{ route('customer.register') }}" class="btn-dark py-1.5">Daftar</a>
                 @endauth
             </div>
 
             <button type="button" @click="menu = ! menu" class="md:hidden" aria-label="Buka menu"><x-icon name="menu" class="size-6" /></button>
         </div>
 
-        <nav x-show="menu" x-cloak class="flex flex-col gap-1 border-t px-4 py-3 text-sm md:hidden">
+        <nav x-show="menu" x-cloak class="flex flex-col gap-1 border-t-2 border-ink px-4 py-3 text-sm md:hidden">
             @foreach ($menu as $item)
-                <a href="{{ route($item['route']) }}" class="rounded-lg px-3 py-2">{{ $item['label'] }}</a>
+                <a href="{{ route($item['route']) }}" class="rounded-lg px-3 py-2 font-semibold">{{ $item['label'] }}</a>
             @endforeach
             @auth
-                <a href="{{ route('beranda') }}" class="btn-primary mt-2">Panel Saya</a>
+                <a href="{{ route('beranda') }}" class="btn-dark mt-2">Panel Saya</a>
             @else
                 <a href="{{ route('customer.login') }}" class="btn-outline mt-2">Masuk</a>
-                <a href="{{ route('customer.register') }}" class="btn-primary">Daftar</a>
+                <a href="{{ route('customer.register') }}" class="btn-dark mt-2">Daftar</a>
             @endauth
         </nav>
     </header>
@@ -52,14 +53,14 @@
         @yield('content')
     </main>
 
-    <footer class="bg-ink text-white">
+    <footer class="border-t-2 border-ink bg-ink text-white">
         <div class="mx-auto grid max-w-6xl gap-8 px-4 py-10 text-sm sm:grid-cols-2 md:grid-cols-4">
             <div>
-                <div class="font-bold">Media Creative</div>
+                <x-logo />
                 <p class="mt-2 text-white/70">PT Media Creative, jasa desain logo, kaos, editing video, foto, poster, flyer, dan banner.</p>
             </div>
             <div>
-                <div class="font-bold">Layanan</div>
+                <div class="text-xs font-bold uppercase tracking-[0.12em] text-lime">Layanan</div>
                 <ul class="mt-2 space-y-1 text-white/70">
                     @foreach ($layananFooter as $nama)
                         <li>{{ $nama }}</li>
@@ -67,7 +68,7 @@
                 </ul>
             </div>
             <div>
-                <div class="font-bold">Perusahaan</div>
+                <div class="text-xs font-bold uppercase tracking-[0.12em] text-lime">Perusahaan</div>
                 <ul class="mt-2 space-y-1 text-white/70">
                     <li><a href="{{ route('website.tentang-kami') }}" class="hover:underline">Tentang Kami</a></li>
                     <li><a href="{{ route('website.kontak') }}" class="hover:underline">Kontak</a></li>
@@ -76,7 +77,7 @@
                 </ul>
             </div>
             <div>
-                <div class="font-bold">Kontak</div>
+                <div class="text-xs font-bold uppercase tracking-[0.12em] text-lime">Kontak</div>
                 <ul class="mt-2 space-y-1 text-white/70">
                     <li>WhatsApp: +{{ \App\Models\SystemSetting::get('wa_admin') }}</li>
                     <li>Email: [EMAIL PERUSAHAAN]</li>
