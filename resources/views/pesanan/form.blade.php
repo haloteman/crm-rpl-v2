@@ -3,11 +3,13 @@
 @section('heading', 'Ajukan Pesanan')
 
 @section('content')
-<a href="{{ route('website.layanan.show', $layanan->slug) }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-brand-dark hover:underline">
+<a href="{{ route('website.layanan.show', $layanan->slug) }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
     <x-icon name="arrow-left" class="size-3.5" /> Kembali ke layanan
 </a>
 
-<h1 class="page-title mt-3">Ajukan Pesanan {{ $layanan->name }}</h1>
+<p class="eyebrow mt-3">Ajukan Pesanan</p>
+
+<h1 class="page-title mt-1">Ajukan Pesanan {{ $layanan->name }}</h1>
 <p class="page-sub">Harga akhir ditetapkan Owner setelah konsultasi lewat WhatsApp.</p>
 
 <form method="POST" action="{{ route('pesanan.store', $layanan->slug) }}" enctype="multipart/form-data" class="card mt-5 max-w-2xl p-5 sm:p-6">

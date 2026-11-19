@@ -3,13 +3,14 @@
 @section('heading', 'Data Pelanggan')
 
 @section('content')
-<a href="{{ route('pelanggan.index') }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-brand-dark hover:underline">
+<a href="{{ route('pelanggan.index') }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
     <x-icon name="arrow-left" class="size-3.5" /> Kembali ke data pelanggan
 </a>
 
 <div class="mt-3 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
-        <h1 class="page-title">Profil Pelanggan</h1>
+        <p class="eyebrow">Pelanggan</p>
+        <h1 class="page-title mt-1">Profil Pelanggan</h1>
         <p class="page-sub">Mendaftar pada {{ $pelanggan->customerProfile->registered_at->format('d/m/Y') }}</p>
     </div>
     @can('customer.manage')

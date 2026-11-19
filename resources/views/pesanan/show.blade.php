@@ -3,11 +3,13 @@
 @section('heading', 'Pesanan Saya')
 
 @section('content')
-<a href="{{ route('pesanan.index') }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-brand-dark hover:underline">
+<a href="{{ route('pesanan.index') }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
     <x-icon name="arrow-left" class="size-3.5" /> Kembali ke pesanan saya
 </a>
 
-<h1 class="page-title mt-3">{{ $order->title }}</h1>
+<p class="eyebrow mt-3">Detail Pesanan</p>
+
+<h1 class="page-title mt-1">{{ $order->title }}</h1>
 <p class="page-sub">
     <span class="font-mono">{{ $order->order_code }}</span> ·
     <span class="badge badge-blue">{{ $order->status->customer_label }}</span> ·

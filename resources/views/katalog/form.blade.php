@@ -3,11 +3,13 @@
 @section('heading', 'Katalog Layanan')
 
 @section('content')
-<a href="{{ route('katalog.index') }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-brand-dark hover:underline">
+<a href="{{ route('katalog.index') }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
     <x-icon name="arrow-left" class="size-3.5" /> Kembali ke katalog layanan
 </a>
 
-<h1 class="page-title mt-3">{{ $layanan->exists ? 'Ubah Layanan' : 'Tambah Layanan' }}</h1>
+<p class="eyebrow mt-3">Layanan dan Pesanan</p>
+
+<h1 class="page-title mt-1">{{ $layanan->exists ? 'Ubah Layanan' : 'Tambah Layanan' }}</h1>
 
 <form method="POST" action="{{ $layanan->exists ? route('katalog.update', $layanan) : route('katalog.store') }}" class="card mt-5 max-w-2xl p-5 sm:p-6">
     @csrf

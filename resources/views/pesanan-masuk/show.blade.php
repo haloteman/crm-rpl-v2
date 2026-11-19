@@ -3,7 +3,7 @@
 @section('heading', 'Pesanan')
 
 @section('content')
-<a href="{{ route('pesanan-masuk.index') }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-brand-dark hover:underline">
+<a href="{{ route('pesanan-masuk.index') }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
     <x-icon name="arrow-left" class="size-3.5" /> Kembali ke pesanan
 </a>
 

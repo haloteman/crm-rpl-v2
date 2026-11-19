@@ -3,11 +3,13 @@
 @section('heading', 'Profil')
 
 @section('content')
-<a href="{{ route('profil.show') }}" class="inline-flex items-center gap-1.5 text-xs font-medium text-brand-dark hover:underline">
+<a href="{{ route('profil.show') }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
     <x-icon name="arrow-left" class="size-3.5" /> Kembali ke profil
 </a>
 
-<h1 class="page-title mt-3">Ubah Profil</h1>
+<p class="eyebrow mt-3">Pengaturan</p>
+
+<h1 class="page-title mt-1">Ubah Profil</h1>
 <p class="page-sub">{{ $user->email }}</p>
 
 <form method="POST" action="{{ route('profil.update') }}" class="card mt-5 max-w-2xl p-5 sm:p-6">
