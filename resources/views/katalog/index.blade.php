@@ -5,17 +5,23 @@
 @section('content')
 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
-        <h1 class="page-title">Katalog Layanan</h1>
-        <p class="page-sub">Layanan yang aktif tampil di website. Harga tidak ditampilkan karena ditetapkan Owner setelah konsultasi.</p>
+        <p class="eyebrow">Layanan dan Pesanan</p>
+        <h1 class="page-title mt-1">Katalog layanan.</h1>
+        <p class="page-sub">Layanan yang tampil di website. Urutan di sini sama dengan urutan di website.</p>
     </div>
     <a href="{{ route('katalog.create') }}" class="btn-primary w-full sm:w-auto">
         <x-icon name="plus" class="size-5" /> Tambah Layanan
     </a>
 </div>
 
-<section class="card mt-5">
+<p class="mt-6 flex items-start gap-2 rounded-xl border-2 border-ink bg-violet/10 px-4 py-3 text-sm">
+    <x-icon name="info" class="mt-0.5 size-4 shrink-0" />
+    <span><b>Harga tidak ditampilkan di katalog.</b> Harga akhir ditetapkan Owner per pesanan setelah konsultasi lewat WhatsApp.</span>
+</p>
+
+<section class="card mt-5 overflow-hidden">
     <table class="block w-full text-left text-sm md:table">
-        <thead class="hidden bg-thead text-xs text-slate-500 md:table-header-group">
+        <thead class="hidden bg-thead text-[11px] font-bold uppercase tracking-[0.1em] md:table-header-group">
             <tr>
                 <th class="px-5 py-3 font-medium">Nama Layanan</th>
                 <th class="px-5 py-3 font-medium">Deskripsi Singkat</th>
@@ -26,13 +32,21 @@
         <tbody class="block md:table-row-group">
             @forelse ($layanans as $layanan)
                 <tr class="block border-t px-4 py-3 hover:bg-thead md:table-row md:p-0">
-                    <td class="block pb-1 font-medium md:table-cell md:px-5 md:py-3">{{ $layanan->name }}</td>
-                    <td class="block py-1 text-slate-500 md:table-cell md:px-5 md:py-3">{{ $layanan->short_description }}</td>
+                    <td class="block pb-1 md:table-cell md:px-5 md:py-3">
+                        <div class="flex items-center gap-3">
+                            <x-ikon-layanan :layanan="$layanan" class="size-10! [&>svg]:size-5!" />
+                            <div>
+                                <div class="font-bold">{{ $layanan->name }}</div>
+                                <div class="text-xs text-slate-500">Urutan {{ $layanan->sort_order }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="block py-1 text-slate-600 md:table-cell md:px-5 md:py-3">{{ $layanan->short_description }}</td>
                     <td class="block py-1 md:table-cell md:px-5 md:py-3">
                         <span class="badge {{ $layanan->is_active ? 'badge-green' : 'badge-gray' }}">{{ $layanan->is_active ? 'Tampil' : 'Disembunyikan' }}</span>
                     </td>
                     <td class="block py-1 md:table-cell md:px-5 md:py-3">
-                        <a href="{{ route('katalog.edit', $layanan) }}" class="text-xs font-medium text-brand-dark hover:underline">Ubah</a>
+                        <a href="{{ route('katalog.edit', $layanan) }}" class="btn-outline px-3 py-1.5 text-xs">Ubah</a>
                     </td>
                 </tr>
             @empty
