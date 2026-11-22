@@ -5,7 +5,6 @@
 @section('content')
 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
-        <p class="eyebrow">Pengaturan</p>
         <h1 class="page-title mt-1">Profil Saya</h1>
         <p class="page-sub">Pastikan data Anda selalu benar agar kami mudah menghubungi Anda.</p>
     </div>

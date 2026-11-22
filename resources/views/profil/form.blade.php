@@ -3,11 +3,9 @@
 @section('heading', 'Profil')
 
 @section('content')
-<a href="{{ route('profil.show') }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
+<a href="{{ route('profil.show') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-dark underline underline-offset-4 hover:text-ink">
     <x-icon name="arrow-left" class="size-3.5" /> Kembali ke profil
 </a>
-
-<p class="eyebrow mt-3">Pengaturan</p>
 
 <h1 class="page-title mt-1">Ubah Profil</h1>
 <p class="page-sub">{{ $user->email }}</p>

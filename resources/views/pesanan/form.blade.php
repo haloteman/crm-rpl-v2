@@ -3,7 +3,7 @@
 @section('heading', 'Ajukan Pesanan')
 
 @section('content')
-<a href="{{ route('website.layanan.show', $layanan->slug) }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
+<a href="{{ route('profil.show') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-dark underline underline-offset-4 hover:text-ink">
     <x-icon name="arrow-left" class="size-3.5" /> Kembali ke layanan
 </a>
 

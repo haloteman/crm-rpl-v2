@@ -3,7 +3,6 @@
 @section('heading', 'Data Pelanggan')
 
 @section('content')
-<p class="eyebrow">Pelanggan</p>
 <h1 class="page-title mt-1">Data pelanggan.</h1>
 <p class="page-sub">Pelanggan dan lead yang mendaftar lewat website.</p>
 

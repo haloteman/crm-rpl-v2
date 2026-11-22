@@ -3,7 +3,6 @@
 @section('heading', 'Pesanan')
 
 @section('content')
-<p class="eyebrow">Layanan dan Pesanan</p>
 <h1 class="page-title mt-1">Pesanan masuk.</h1>
 <p class="page-sub">Pantau pesanan yang masuk dan tindak lanjuti.</p>
 
@@ -63,7 +62,6 @@
                 <tr class="block border-t md:table-row">
                     <td colspan="6" class="block px-5 py-8 text-center text-slate-500 md:table-cell">
                         Tidak ada pesanan yang cocok.
-                        <a href="{{ route('pesanan-masuk.index') }}" class="font-medium text-brand-dark hover:underline">Hapus pencarian dan filter</a>
                     </td>
                 </tr>
             @endforelse

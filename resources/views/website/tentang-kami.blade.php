@@ -28,8 +28,8 @@
 
 <section class="mx-auto max-w-6xl px-4 py-16">
     <div class="grid gap-5 sm:grid-cols-2">
-        <div class="card p-5"><p class="eyebrow">Visi</p><p class="mt-2 font-semibold">[VISI PERUSAHAAN]</p></div>
-        <div class="card bg-lime p-5"><p class="eyebrow text-ink">Misi</p><p class="mt-2 font-semibold">[MISI PERUSAHAAN]</p></div>
+        <div class="card p-5"><p class="eyebrow">Visi</p><p class="mt-2 font-semibold"></p>Maju lebih baik dan melangkah lebih depan</div>
+        <div class="card bg-lime p-5"><p class="eyebrow text-ink">Misi</p><p class="mt-2 font-semibold"></p>Kuat dan bersinergi</div>
     </div>
 
     <p class="eyebrow mt-16">Cara Kami Bekerja</p>
@@ -50,13 +50,26 @@
         <p class="eyebrow">Tim Kami</p>
         <h2 class="mt-2 text-4xl font-extrabold">Orang di balik karya.</h2>
         <div class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            @foreach (['bg-ink', 'bg-lime', 'bg-violet', 'bg-sun'] as $warna)
+            @foreach ([
+                ['nama' => 'Afif',    'peran' => 'Frontend Developer', 'warna' => 'bg-ink',    'foto' => 'afif.jpg'],
+                ['nama' => 'Ibrahim', 'peran' => 'Team Leader',        'warna' => 'bg-lime',   'foto' => 'ibrahim.jpg'],
+                ['nama' => 'Rendi',   'peran' => 'System Analyst',     'warna' => 'bg-violet', 'foto' => 'rendi.jpg'],
+                ['nama' => 'Kiki',    'peran' => 'Backend Developer',  'warna' => 'bg-sun',    'foto' => 'kiki.jpg'],
+            ] as $anggota)
                 <div class="card p-3">
-                    <div class="aspect-[4/3] rounded-xl border-2 border-ink {{ $warna }}"></div>
-                    <div class="mt-3 px-1 font-bold">[NAMA]</div>
-                    <div class="px-1 pb-1 text-sm text-slate-600">[PERAN]</div>
+                    {{-- foto anggota, kalau file belum ada tampil kotak warna --}}
+                    @if (file_exists(public_path('images/tim/'.$anggota['foto'])))
+                        <img src="{{ asset('images/tim/'.$anggota['foto']) }}" alt="{{ $anggota['nama'] }}"
+                             class="aspect-[4/3] w-full rounded-xl border-2 border-ink object-cover {{ $anggota['warna'] }}">
+                    @else
+                        <div class="aspect-[4/3] rounded-xl border-2 border-ink {{ $anggota['warna'] }}"></div>
+                    @endif
+                    <div class="mt-3 px-1 font-bold">{{ $anggota['nama'] }}</div>
+                    <div class="px-1 pb-1 text-sm text-slate-600">{{ $anggota['peran'] }}</div>
                 </div>
             @endforeach
+        </div>
+        </div>
         </div>
     </div>
 </section>

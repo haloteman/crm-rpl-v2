@@ -3,7 +3,6 @@
 
 @section('content')
 <section class="mx-auto max-w-6xl px-4 pt-16">
-    <p class="eyebrow">Kontak</p>
     <h1 class="mt-2 text-5xl font-extrabold">Ada yang ingin <span class="mark">ditanyakan?</span></h1>
     <p class="mt-3 text-slate-600">Hubungi kami lewat WhatsApp tanpa perlu membuat akun.</p>
 

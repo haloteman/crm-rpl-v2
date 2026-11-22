@@ -33,9 +33,7 @@
         <div class="absolute right-0 top-0 size-60 rounded-full border-2 border-ink bg-lime"></div>
         <div class="absolute right-28 top-4 flex size-20 -rotate-6 items-center justify-center rounded-xl border-2 border-ink bg-sand shadow-hard"><x-icon name="camera" class="size-9" /></div>
         <div class="absolute right-14 top-24 flex size-24 rotate-3 items-center justify-center rounded-xl border-2 border-ink bg-ink text-lime shadow-[4px_4px_0_0_var(--color-sun)]"><x-icon name="shapes" class="size-10" /></div>
-        <div class="absolute bottom-6 left-6 size-28 -rotate-6 rounded-xl border-2 border-ink bg-violet shadow-hard"></div>
         <div class="absolute bottom-0 right-0 flex size-20 rotate-6 items-center justify-center rounded-xl border-2 border-ink bg-sun shadow-hard"><x-icon name="shirt" class="size-9" /></div>
-        <div class="absolute left-0 top-36 -rotate-3 rounded-lg border-2 border-ink bg-white px-3 py-1.5 text-xs font-bold shadow-hard-sm">Logo · Kaos · Video · Foto</div>
     </div>
 </section>
 

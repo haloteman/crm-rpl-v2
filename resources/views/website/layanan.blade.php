@@ -12,7 +12,6 @@
 
 @section('content')
 <section class="mx-auto max-w-6xl px-4 py-12">
-    <p class="eyebrow">Layanan</p>
     <h1 class="mt-2 max-w-3xl text-5xl font-extrabold leading-[1.05]">Pilih layanan, lalu <span class="mark">ajukan pesanan</span> atau tanya dulu.</h1>
     <p class="mt-3 text-slate-600">Harga tidak dipasang tetap. Harga disepakati setelah Anda berkonsultasi lewat WhatsApp.</p>
 

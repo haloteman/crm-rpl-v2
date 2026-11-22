@@ -5,7 +5,6 @@
 @section('content')
 <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
     <div>
-        <p class="eyebrow">Layanan dan Pesanan</p>
         <h1 class="page-title mt-1">Katalog layanan.</h1>
         <p class="page-sub">Layanan yang tampil di website. Urutan di sini sama dengan urutan di website.</p>
     </div>
@@ -13,11 +12,6 @@
         <x-icon name="plus" class="size-5" /> Tambah Layanan
     </a>
 </div>
-
-<p class="mt-6 flex items-start gap-2 rounded-xl border-2 border-ink bg-violet/10 px-4 py-3 text-sm">
-    <x-icon name="info" class="mt-0.5 size-4 shrink-0" />
-    <span><b>Harga tidak ditampilkan di katalog.</b> Harga akhir ditetapkan Owner per pesanan setelah konsultasi lewat WhatsApp.</span>
-</p>
 
 <section class="card mt-5 overflow-hidden">
     <table class="block w-full text-left text-sm md:table">

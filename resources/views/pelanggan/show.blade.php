@@ -3,8 +3,8 @@
 @section('heading', 'Data Pelanggan')
 
 @section('content')
-<a href="{{ route('pelanggan.index') }}" class="inline-flex items-center gap-1.5 text-sm font-bold underline underline-offset-4">
-    <x-icon name="arrow-left" class="size-3.5" /> Kembali ke data pelanggan
+<a href="{{ route('profil.show') }}" class="inline-flex items-center gap-1.5 text-xs font-bold text-brand-dark underline underline-offset-4 hover:text-ink">
+    <x-icon name="arrow-left" class="size-3.5" /> Kembali ke pelanggan
 </a>
 
 <div class="mt-3 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

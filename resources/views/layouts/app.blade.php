@@ -115,11 +115,6 @@
         </aside>
 
         <div class="lg:pl-[256px]">
-            <header class="sticky top-0 z-20 flex h-12 items-center gap-3 border-b-2 border-ink bg-paper px-4 text-[13px] sm:px-8">
-                <button type="button" class="lg:hidden" @click="sidebar = true" aria-label="Buka menu"><x-icon name="menu" class="size-6" /></button>
-                <span class="hidden items-center gap-2 sm:flex"><x-icon name="clock" class="size-4" /> Sesi aktif. Berakhir otomatis setelah 12 jam tanpa aktivitas.</span>
-                <span class="ml-auto text-slate-600">{{ now()->translatedFormat('l, j F Y') }}</span>
-            </header>
 
             <main class="p-4 sm:p-8">
                 @include('layouts.status')

@@ -9,7 +9,6 @@
     {{-- judul + tombol tambah --}}
     <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-            <p class="eyebrow">Pengaturan</p>
             <h1 class="page-title mt-1">Manajemen akun.</h1>
             <p class="page-sub">Kelola akun dan akses pengguna internal PT Media Creative.</p>
         </div>
