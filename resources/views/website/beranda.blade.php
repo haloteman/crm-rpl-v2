@@ -33,7 +33,9 @@
         <div class="absolute right-0 top-0 size-60 rounded-full border-2 border-ink bg-lime"></div>
         <div class="absolute right-28 top-4 flex size-20 -rotate-6 items-center justify-center rounded-xl border-2 border-ink bg-sand shadow-hard"><x-icon name="camera" class="size-9" /></div>
         <div class="absolute right-14 top-24 flex size-24 rotate-3 items-center justify-center rounded-xl border-2 border-ink bg-ink text-lime shadow-[4px_4px_0_0_var(--color-sun)]"><x-icon name="shapes" class="size-10" /></div>
+        <div class="absolute bottom-6 left-6 flex size-28 -rotate-6 items-center justify-center rounded-xl border-2 border-ink bg-violet text-lime shadow-hard"><x-icon name="store" class="size-12" /></div>
         <div class="absolute bottom-0 right-0 flex size-20 rotate-6 items-center justify-center rounded-xl border-2 border-ink bg-sun shadow-hard"><x-icon name="shirt" class="size-9" /></div>
+        <div class="absolute left-0 top-36 -rotate-3 rounded-lg border-2 border-ink bg-white px-3 py-1.5 text-xs font-bold shadow-hard-sm">Logo · Kaos · Video</div>
     </div>
 </section>
 
@@ -42,7 +44,7 @@
         <div>
             <p class="eyebrow">Tentang Kami</p>
             <h2 class="mt-2 text-4xl font-extrabold">Dari ide sederhana menjadi karya yang rapi.</h2>
-            <p class="mt-3 text-slate-700">[PROFIL SINGKAT PT MEDIA CREATIVE]</p>
+            <p class="mt-3 text-slate-700">PROFIL SINGKAT PT MEDIA CREATIVE</p>
             <a href="{{ route('website.tentang-kami') }}" class="btn-outline mt-6">Selengkapnya →</a>
         </div>
         <ol class="space-y-4">
@@ -67,7 +69,7 @@
             @include('website.kartu-layanan')
         @endforeach
     </div>
-    <a href="{{ route('website.layanan') }}" class="mt-6 inline-block text-sm font-bold underline underline-offset-4">Lihat semua layanan →</a>
+    <a href="{{ route('website.layanan') }}" class="mt-6 inline-block gap-1.5 text-xs font-bold text-brand-dark underline underline-offset-4 hover:text-ink">Lihat semua layanan →</a>
 </section>
 
 <section class="border-y-2 border-ink bg-ink text-white">

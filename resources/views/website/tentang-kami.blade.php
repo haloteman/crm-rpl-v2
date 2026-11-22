@@ -15,7 +15,7 @@
         <div>
             <p class="eyebrow">Tentang Kami</p>
             <h1 class="mt-2 text-5xl font-extrabold sm:text-6xl">PT Media Creative</h1>
-            <p class="mt-4 max-w-xl text-slate-700">[PROFIL PERUSAHAAN: SIAPA KAMI, KAPAN BERDIRI, DAN APA YANG KAMI KERJAKAN]</p>
+            <p class="mt-4 max-w-xl text-slate-700">KAMI SIAP MELAYANI, BERDIRI SEJAK TAHUN 2000, BEBERAPA LAYANAN TELAH KAMI SEDIAKAN UNTUK ANDA</p>
         </div>
         <div aria-hidden="true" class="hidden grid-cols-2 gap-4 lg:grid">
             <div class="aspect-square rounded-2xl border-2 border-ink bg-ink shadow-[4px_4px_0_0_var(--color-violet)]"></div>

@@ -57,6 +57,7 @@ $paths = [
     'play' => 'M3.75 5.25h16.5v13.5H3.75V5.25ZM10.5 9.75v4.5l3.75-2.25-3.75-2.25Z',
     'document' => 'M6 2.25h8.25L19.5 7.5v14.25H6V2.25ZM9 11.25h6M9 14.25h6M9 17.25h3.75',
     'banner' => 'M3.75 4.5h16.5v9H3.75v-9ZM7.5 13.5v6M16.5 13.5v6M7.5 9h9',
+    'store' => 'M3 9.5 4.5 4h15L21 9.5M3 9.5a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M5 12.5V20h14v-7.5M10 20v-4.5h4V20',
 ];
 @endphp
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" {{ $attributes->merge(['class' => $class]) }}>
