@@ -15,13 +15,19 @@
                 <a href="{{ \App\Services\WaLinkBuilder::buildAdminInquiry() }}" target="_blank" rel="noopener" class="btn-dark mt-4">Chat via WhatsApp</a>
             </div>
             <dl class="card divide-y-2 divide-line px-5 text-sm">
-                <div class="py-4"><dt class="eyebrow">Email</dt><dd class="mt-1 font-semibold">[EMAIL PERUSAHAAN]</dd></div>
-                <div class="py-4"><dt class="eyebrow">Alamat</dt><dd class="mt-1 font-semibold">[ALAMAT PERUSAHAAN]</dd></div>
-                <div class="py-4"><dt class="eyebrow">Jam Layanan</dt><dd class="mt-1 font-semibold">[JAM OPERASIONAL]</dd></div>
+                <div class="py-4"><dt class="eyebrow">Email</dt><dd class="mt-1 font-semibold">EMAIL PERUSAHAAN</dd></div>
+                <div class="py-4"><dt class="eyebrow">Alamat</dt><dd class="mt-1 font-semibold">ALAMAT PERUSAHAAN</dd></div>
+                <div class="py-4"><dt class="eyebrow">Jam Layanan</dt><dd class="mt-1 font-semibold">JAM OPERASIONAL</dd></div>
             </dl>
         </div>
-        <div class="card flex min-h-72 items-center justify-center bg-sand bg-[repeating-linear-gradient(45deg,transparent_0_12px,rgb(18_24_38/0.08)_12px_13px)]">
-            <span class="rounded-lg border-2 border-ink bg-white px-3 py-1.5 text-xs font-bold shadow-hard-sm">[PETA LOKASI]</span>
+
+        {{-- peta lokasi, isi $lokasiPeta dengan alamat seperti yang diketik di Google Maps --}}
+        @php $lokasiPeta = 'Nama tempat atau alamat lengkap, Kota'; @endphp
+        <div class="card relative min-h-72 overflow-hidden">
+            <iframe title="Peta lokasi perusahaan"
+                    src="https://www.google.com/maps?q={{ urlencode($lokasiPeta) }}&output=embed"
+                    class="absolute inset-0 size-full border-0"
+                    loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
         </div>
     </div>
 </section>
