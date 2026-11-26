@@ -17,7 +17,7 @@
             <dl class="card divide-y-2 divide-line px-5 text-sm">
                 <div class="py-4"><dt class="eyebrow">Email</dt><dd class="mt-1 font-semibold">EMAIL PERUSAHAAN</dd></div>
                 <div class="py-4"><dt class="eyebrow">Alamat</dt><dd class="mt-1 font-semibold">ALAMAT PERUSAHAAN</dd></div>
-                <div class="py-4"><dt class="eyebrow">Jam Layanan</dt><dd class="mt-1 font-semibold">JAM OPERASIONAL</dd></div>
+                <div class="py-4"><dt class="eyebrow">Jam Layanan</dt><dd class="mt-1 font-semibold">09.00 - 20.00 WIB</dd></div>
             </dl>
         </div>
 
