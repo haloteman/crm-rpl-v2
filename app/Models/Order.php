@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\StatusPesananBerubah;
 use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
@@ -131,6 +132,9 @@ class Order extends Model
 
         $this->status()->associate($statusBaru);
         $this->save();
+
+        // pemberitahuan ke panel pelanggan setiap status pesanan berubah
+        $this->customer->notify(new StatusPesananBerubah($this, $statusBaru->customer_label));
     }
 
     // contoh kode: ORD-0001

@@ -11,6 +11,7 @@ use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\LampiranController;
 use App\Http\Controllers\LupaPasswordController;
+use App\Http\Controllers\NotifikasiController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PemantauanController;
@@ -63,6 +64,9 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/profil', [ProfilController::class, 'show'])->name('profil.show');
         Route::get('/profil/ubah', [ProfilController::class, 'edit'])->name('profil.edit');
         Route::post('/profil/ubah', [ProfilController::class, 'update'])->name('profil.update');
+        Route::get('/notifikasi', [NotifikasiController::class, 'index'])->name('notifikasi.index');
+        Route::post('/notifikasi/baca-semua', [NotifikasiController::class, 'bacaSemua'])->name('notifikasi.baca-semua');
+        Route::post('/notifikasi/{id}', [NotifikasiController::class, 'baca'])->name('notifikasi.baca');
     });
 
     Route::middleware('permission:order.own')->group(function () {
