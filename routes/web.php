@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\HargaController;
+use App\Http\Controllers\KapasitasController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\LampiranController;
@@ -74,6 +75,11 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::post('/pesanan-masuk/{order}/pelunasan', [PembayaranController::class, 'simpanPelunasan'])->middleware('permission:revenue.manage')->name('pembayaran.pelunasan');
         Route::post('/pesanan-masuk/{order}/batal', [PenutupanController::class, 'batal'])->middleware('permission:order.cancel')->name('pesanan-masuk.batal');
         Route::post('/pesanan-masuk/{order}/tolak', [PenutupanController::class, 'tolak'])->middleware('role:Owner')->name('pesanan-masuk.tolak');
+    });
+
+    Route::middleware('role:Owner')->group(function () {
+        Route::get('/kapasitas-mingguan', [KapasitasController::class, 'index'])->name('kapasitas.index');
+        Route::post('/kapasitas-mingguan', [KapasitasController::class, 'simpan'])->name('kapasitas.simpan');
     });
 
     Route::middleware('permission:project.assign')->group(function () {

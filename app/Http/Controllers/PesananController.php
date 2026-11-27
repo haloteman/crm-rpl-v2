@@ -8,6 +8,7 @@ use App\Models\PaymentTransaction;
 use App\Models\ProgressAttachment;
 use App\Models\Service;
 use App\Models\StatusDefinition;
+use App\Services\KapasitasMingguan;
 use Illuminate\Http\Request;
 
 class PesananController extends Controller
@@ -17,6 +18,7 @@ class PesananController extends Controller
         return view('pesanan.form', [
             'layanan' => Service::where('slug', $slug)->where('is_active', true)->firstOrFail(),
             'user' => auth()->user(),
+            'kapasitasMinggu' => KapasitasMingguan::beberapaMinggu(26),
         ]);
     }
 

@@ -6,6 +6,7 @@ use App\Models\ClosureReason;
 use App\Models\Order;
 use App\Models\OrderClosure;
 use App\Models\StatusDefinition;
+use App\Services\KapasitasMingguan;
 use Illuminate\Http\Request;
 
 class PesananMasukController extends Controller
@@ -35,6 +36,7 @@ class PesananMasukController extends Controller
             'orders' => $query->paginate(10)->withQueryString(),
             'semuaStatus' => StatusDefinition::where('scope', 'order')->withCount('orders')->orderBy('sort_order')->get(),
             'totalPesanan' => Order::count(),
+            'kapasitas' => KapasitasMingguan::ringkasan(now()),
         ]);
     }
 
@@ -51,6 +53,7 @@ class PesananMasukController extends Controller
             'order' => $order,
             'semuaStatus' => StatusDefinition::where('scope', 'order')->where('code', '!=', 'dibatalkan')->orderBy('sort_order')->get(),
             'labelStatus' => StatusDefinition::where('scope', 'order')->pluck('label', 'code'),
+            'kapasitas' => KapasitasMingguan::ringkasan($order->expected_deadline),
             'alasanBatal' => ClosureReason::where('closure_type', OrderClosure::BATAL)->where('is_active', true)->orderBy('sort_order')->get(),
             'alasanTolak' => ClosureReason::where('closure_type', OrderClosure::TOLAK)->where('is_active', true)->orderBy('sort_order')->get(),
         ]);

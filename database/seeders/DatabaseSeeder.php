@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CapacitySetting;
 use App\Models\ClosureReason;
 use App\Models\Role;
 use App\Models\Service;
@@ -100,6 +101,13 @@ class DatabaseSeeder extends Seeder
         // nomor contoh, ganti dengan nomor WhatsApp asli perusahaan
         SystemSetting::create(['setting_key' => 'wa_admin', 'setting_value' => '6285143334354', 'description' => 'Nomor WhatsApp Admin']);
         SystemSetting::create(['setting_key' => 'wa_owner', 'setting_value' => '6285143334354', 'description' => 'Nomor WhatsApp Owner']);
+
+        CapacitySetting::create([
+            'capacity_per_week' => 30,
+            'warning_threshold_percent' => 80,
+            'effective_from' => '2026-01-01',
+            'created_by' => User::role(Role::OWNER)->first()->id,
+        ]);
 
         // kode, label internal, label untuk customer, status berikutnya yang boleh
         $statusPesanan = [
