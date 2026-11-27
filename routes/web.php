@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerAuthController;
+use App\Http\Controllers\HargaController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\KonsultasiController;
 use App\Http\Controllers\LupaPasswordController;
@@ -62,6 +63,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/pesanan-masuk', [PesananMasukController::class, 'index'])->name('pesanan-masuk.index');
         Route::get('/pesanan-masuk/{order}', [PesananMasukController::class, 'show'])->name('pesanan-masuk.show');
         Route::post('/pesanan-masuk/{order}/konsultasi', [KonsultasiController::class, 'simpan'])->middleware('permission:consult.note')->name('konsultasi.simpan');
+        Route::post('/pesanan-masuk/{order}/harga', [HargaController::class, 'simpan'])->middleware('permission:price.set')->name('harga.simpan');
     });
 
     Route::get('/referensi/{referensi}', [ReferensiController::class, 'unduh'])->name('referensi.unduh');

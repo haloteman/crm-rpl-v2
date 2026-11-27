@@ -57,6 +57,11 @@ class Order extends Model
         return $this->hasOne(OrderConsultation::class);
     }
 
+    public function pricing()
+    {
+        return $this->hasOne(OrderPricing::class);
+    }
+
     public function closure()
     {
         return $this->hasOne(OrderClosure::class);
@@ -71,6 +76,20 @@ class Order extends Model
     public function statusHistories()
     {
         return $this->hasMany(OrderStatusHistory::class);
+    }
+
+    public function ubahStatus($kode)
+    {
+        $statusBaru = StatusDefinition::pesanan($kode);
+
+        $this->statusHistories()->create([
+            'from_status' => $this->status->code,
+            'to_status' => $statusBaru->code,
+            'changed_by' => auth()->id(),
+            'changed_at' => now(),
+        ]);
+
+        $this->update(['status_id' => $statusBaru->id]);
     }
 
     // contoh kode: ORD-0001

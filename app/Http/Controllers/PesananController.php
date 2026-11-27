@@ -108,7 +108,7 @@ class PesananController extends Controller
     {
         $this->pastikanMilikSendiri($order);
 
-        $order->load('service', 'status', 'references', 'statusHistories');
+        $order->load('service', 'status', 'references', 'statusHistories', 'pricing');
 
         return view('pesanan.show', [
             'order' => $order,

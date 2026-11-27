@@ -35,6 +35,11 @@ class PesananMasukController extends Controller
     {
         $order->load('customer.customerProfile', 'service', 'status', 'references', 'statusHistories', 'consultation');
 
+        // nominal harga hanya untuk Owner, Admin tidak boleh menerima datanya
+        if (auth()->user()->can('price.set')) {
+            $order->load('pricing');
+        }
+
         return view('pesanan-masuk.show', [
             'order' => $order,
             'semuaStatus' => StatusDefinition::where('scope', 'order')->where('code', '!=', 'dibatalkan')->orderBy('sort_order')->get(),
