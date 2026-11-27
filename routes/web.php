@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BerandaController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\HargaController;
@@ -46,7 +47,7 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
-    Route::view('/beranda', 'beranda')->name('beranda');
+    Route::get('/beranda', [BerandaController::class, 'index'])->name('beranda');
 
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
