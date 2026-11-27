@@ -21,9 +21,6 @@ class Order extends Model
         'extra_fields',
         'contact_name',
         'contact_phone',
-        'cancel_reason',
-        'cancelled_at',
-        'cancelled_by',
     ];
 
     protected function casts(): array
@@ -32,7 +29,6 @@ class Order extends Model
             'expected_deadline' => 'date',
             'budget_estimate' => 'decimal:2',
             'extra_fields' => 'array',
-            'cancelled_at' => 'datetime',
         ];
     }
 
@@ -59,6 +55,11 @@ class Order extends Model
     public function consultation()
     {
         return $this->hasOne(OrderConsultation::class);
+    }
+
+    public function closure()
+    {
+        return $this->hasOne(OrderClosure::class);
     }
 
     // catatan tidak bisa diubah lagi kalau sudah dikunci atau pesanan sudah selesai/dibatalkan

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ClosureReason;
 use App\Models\Role;
 use App\Models\Service;
 use App\Models\StatusDefinition;
@@ -102,13 +103,14 @@ class DatabaseSeeder extends Seeder
 
         // kode, label internal, label untuk customer, status berikutnya yang boleh
         $statusPesanan = [
-            ['menunggu_konsultasi', 'Menunggu Konsultasi', 'Menunggu Konsultasi', ['menunggu_dp', 'dibatalkan']],
-            ['menunggu_dp', 'Menunggu DP', 'Menunggu Pembayaran DP', ['dp_diterima', 'dibatalkan']],
+            ['menunggu_konsultasi', 'Menunggu Konsultasi', 'Menunggu Konsultasi', ['menunggu_dp', 'dibatalkan', 'ditolak']],
+            ['menunggu_dp', 'Menunggu DP', 'Menunggu Pembayaran DP', ['dp_diterima', 'dibatalkan', 'ditolak']],
             ['dp_diterima', 'DP Diterima', 'DP Diterima', ['dikerjakan']],
             ['dikerjakan', 'Dikerjakan', 'Sedang Dikerjakan', ['revisi', 'selesai']],
             ['revisi', 'Revisi', 'Revisi', ['dikerjakan', 'selesai']],
             ['selesai', 'Selesai', 'Selesai', []],
             ['dibatalkan', 'Dibatalkan', 'Dibatalkan', []],
+            ['ditolak', 'Ditolak', 'Ditolak', []],
         ];
 
         foreach ($statusPesanan as $urutan => [$kode, $label, $labelCustomer, $berikutnya]) {
@@ -120,6 +122,23 @@ class DatabaseSeeder extends Seeder
                 'sort_order' => $urutan + 1,
                 'allowed_next' => $berikutnya,
                 'is_final' => empty($berikutnya),
+            ]);
+        }
+
+        $alasanTutup = [
+            ['cancelled', 'permintaan_customer', 'Permintaan customer'],
+            ['cancelled', 'lainnya', 'Lainnya'],
+            ['rejected', 'kapasitas_penuh', 'Kapasitas penuh'],
+            ['rejected', 'tenggat_terlalu_singkat', 'Tenggat terlalu singkat'],
+            ['rejected', 'lainnya', 'Lainnya'],
+        ];
+
+        foreach ($alasanTutup as $urutan => [$jenis, $kode, $label]) {
+            ClosureReason::create([
+                'closure_type' => $jenis,
+                'code' => $kode,
+                'label' => $label,
+                'sort_order' => $urutan + 1,
             ]);
         }
     }
