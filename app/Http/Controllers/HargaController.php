@@ -14,22 +14,7 @@ class HargaController extends Controller
             abort(403);
         }
 
-        $request->validate([
-            'final_price' => 'required|numeric|min:1',
-            'dp_type' => 'required|in:'.OrderPricing::PERSEN.','.OrderPricing::NOMINAL,
-            'dp_value' => 'required|numeric|min:1',
-        ], [
-            'final_price.required' => 'Harga akhir wajib diisi',
-            'final_price.min' => 'Harga akhir harus lebih dari 0',
-            'dp_value.required' => 'Besaran DP wajib diisi',
-            'dp_value.min' => 'Besaran DP harus lebih dari 0',
-        ]);
-
-        if ($request->dp_type == OrderPricing::PERSEN) {
-            $dp = $request->final_price * $request->dp_value / 100;
-        } else {
-            $dp = $request->dp_value;
-        }
+        $dp = $this->hitungDp($request);
 
         if ($dp > $request->final_price) {
             return back()->withErrors(['dp_value' => 'DP tidak boleh melebihi harga akhir'])->withInput();
@@ -50,5 +35,61 @@ class HargaController extends Controller
         $order->ubahStatus('menunggu_dp');
 
         return redirect()->route('pesanan-masuk.show', $order)->with('status', 'Harga akhir dan DP berhasil ditetapkan');
+    }
+
+    // harga dan DP masih bisa dikoreksi selama DP belum diterima
+    public function ubah(Request $request, Order $order)
+    {
+        if ($order->status->code != 'menunggu_dp') {
+            abort(403);
+        }
+
+        $dp = $this->hitungDp($request);
+
+        if ($dp > $request->final_price) {
+            return back()->withErrors(['dp_value' => 'DP tidak boleh melebihi harga akhir'])->withInput();
+        }
+
+        $order->pricingHistories()->create([
+            'old_final_price' => $order->pricing->final_price,
+            'old_dp_type' => $order->pricing->dp_type,
+            'old_dp_value' => $order->pricing->dp_value,
+            'new_final_price' => $request->final_price,
+            'new_dp_type' => $request->dp_type,
+            'new_dp_value' => $request->dp_value,
+            'changed_by' => auth()->id(),
+            'changed_at' => now(),
+        ]);
+
+        $order->pricing->update([
+            'final_price' => $request->final_price,
+            'dp_type' => $request->dp_type,
+            'dp_value' => $request->dp_value,
+            'dp_amount' => $dp,
+            'set_by' => auth()->id(),
+            'set_at' => now(),
+        ]);
+
+        return redirect()->route('pesanan-masuk.show', $order)->with('status', 'Harga akhir dan DP berhasil diubah');
+    }
+
+    private function hitungDp(Request $request)
+    {
+        $request->validate([
+            'final_price' => 'required|numeric|min:1',
+            'dp_type' => 'required|in:'.OrderPricing::PERSEN.','.OrderPricing::NOMINAL,
+            'dp_value' => 'required|numeric|min:1',
+        ], [
+            'final_price.required' => 'Harga akhir wajib diisi',
+            'final_price.min' => 'Harga akhir harus lebih dari 0',
+            'dp_value.required' => 'Besaran DP wajib diisi',
+            'dp_value.min' => 'Besaran DP harus lebih dari 0',
+        ]);
+
+        if ($request->dp_type == OrderPricing::PERSEN) {
+            return $request->final_price * $request->dp_value / 100;
+        }
+
+        return $request->dp_value;
     }
 }

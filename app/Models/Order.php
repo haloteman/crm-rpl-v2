@@ -87,6 +87,11 @@ class Order extends Model
         return $this->hasOne(Project::class);
     }
 
+    public function pricingHistories()
+    {
+        return $this->hasMany(OrderPricingHistory::class)->latest('changed_at');
+    }
+
     public function closure()
     {
         return $this->hasOne(OrderClosure::class);

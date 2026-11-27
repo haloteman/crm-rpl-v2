@@ -77,6 +77,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/pesanan-masuk/{order}', [PesananMasukController::class, 'show'])->name('pesanan-masuk.show');
         Route::post('/pesanan-masuk/{order}/konsultasi', [KonsultasiController::class, 'simpan'])->middleware('permission:consult.note')->name('konsultasi.simpan');
         Route::post('/pesanan-masuk/{order}/harga', [HargaController::class, 'simpan'])->middleware('permission:price.set')->name('harga.simpan');
+        Route::post('/pesanan-masuk/{order}/harga/ubah', [HargaController::class, 'ubah'])->middleware('permission:price.set')->name('harga.ubah');
         Route::post('/pesanan-masuk/{order}/dp', [PembayaranController::class, 'simpanDp'])->middleware('permission:revenue.manage')->name('pembayaran.dp');
         Route::post('/pesanan-masuk/{order}/pelunasan', [PembayaranController::class, 'simpanPelunasan'])->middleware('permission:revenue.manage')->name('pembayaran.pelunasan');
         Route::post('/pesanan-masuk/{order}/batal', [PenutupanController::class, 'batal'])->middleware('permission:order.cancel')->name('pesanan-masuk.batal');

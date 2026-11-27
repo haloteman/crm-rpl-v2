@@ -46,7 +46,7 @@ class PesananMasukController extends Controller
 
         // nominal harga hanya untuk Owner, Admin tidak boleh menerima datanya
         if (auth()->user()->can('price.set')) {
-            $order->load('pricing', 'payments');
+            $order->load('pricing', 'payments', 'pricingHistories.changedBy');
         }
 
         return view('pesanan-masuk.show', [
