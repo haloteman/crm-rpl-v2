@@ -84,6 +84,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
 
     Route::middleware('permission:revenue.view')->group(function () {
         Route::get('/riwayat-pendapatan', [PendapatanController::class, 'index'])->name('pendapatan.index');
+        Route::get('/riwayat-pendapatan/proyek/{project}', [PendapatanController::class, 'proyek'])->name('pendapatan.proyek');
     });
 
     Route::middleware('role:Owner')->group(function () {

@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
 use App\Models\PaymentTransaction;
+use App\Models\Project;
 use App\Models\Service;
 use Illuminate\Http\Request;
 
@@ -47,6 +47,16 @@ class PendapatanController extends Controller
             'transaksi' => (clone $query)->paginate(10)->withQueryString(),
             'totalFilter' => (clone $query)->sum('amount'),
             'semuaLayanan' => Service::orderBy('sort_order')->get(),
+        ]);
+    }
+
+    public function proyek(Project $project)
+    {
+        $project->load('order.service', 'order.customer', 'order.pricing', 'order.payments', 'designer');
+
+        return view('pendapatan.proyek', [
+            'project' => $project,
+            'pendapatanKotor' => $project->order->totalDibayar(),
         ]);
     }
 }
