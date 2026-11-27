@@ -113,7 +113,7 @@ class PesananController extends Controller
     {
         $this->pastikanMilikSendiri($order);
 
-        $order->load('service', 'status', 'references', 'statusHistories', 'pricing', 'closure.reason');
+        $order->load('service', 'status', 'references', 'statusHistories', 'pricing', 'closure.reason', 'project.rating');
 
         // riwayat pembayaran customer, yang sudah dibatalkan Owner tidak ditampilkan
         $order->load(['payments' => function ($query) {
@@ -147,6 +147,35 @@ class PesananController extends Controller
             'timeline' => $order->project ? TimelineProyek::untuk($order->project) : collect(),
             'labelStatus' => StatusDefinition::where('scope', 'order')->pluck('customer_label', 'code'),
         ]);
+    }
+
+    public function rating(Request $request, Order $order)
+    {
+        $this->pastikanMilikSendiri($order);
+
+        // rating hanya sekali dan hanya setelah proyek selesai
+        if ($order->project?->status->code != 'selesai' || $order->project->rating) {
+            abort(403);
+        }
+
+        $request->validate([
+            'rating' => 'required|integer|min:1|max:5',
+            'review' => 'nullable|max:1000',
+        ], [
+            'rating.required' => 'Rating bintang wajib dipilih',
+            'rating.integer' => 'Rating harus 1 sampai 5',
+            'rating.min' => 'Rating harus 1 sampai 5',
+            'rating.max' => 'Rating harus 1 sampai 5',
+            'review.max' => 'Ulasan maksimal 1000 karakter',
+        ]);
+
+        $order->project->rating()->create([
+            'customer_id' => auth()->id(),
+            'rating' => $request->rating,
+            'review' => $request->review,
+        ]);
+
+        return redirect()->route('pesanan.show', $order)->with('status', 'Terima kasih atas rating dan ulasannya');
     }
 
     private function pastikanMilikSendiri(Order $order)

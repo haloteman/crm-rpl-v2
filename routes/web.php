@@ -66,6 +66,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/pesanan-saya', [PesananController::class, 'index'])->name('pesanan.index');
         Route::get('/pesanan-saya/{order}', [PesananController::class, 'show'])->name('pesanan.show');
         Route::get('/pesanan-saya/{order}/tracking', [PesananController::class, 'tracking'])->name('pesanan.tracking');
+        Route::post('/pesanan-saya/{order}/rating', [PesananController::class, 'rating'])->name('pesanan.rating');
     });
 
     Route::middleware('permission:order.view')->group(function () {

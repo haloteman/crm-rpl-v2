@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ProjectRating;
 use App\Models\Service;
 use App\Models\SystemSetting;
 use App\Services\KapasitasMingguan;
@@ -13,6 +14,8 @@ class WebsiteController extends Controller
         return view('website.beranda', [
             'layanans' => Service::where('is_active', true)->orderBy('sort_order')->take(4)->get(),
             'kapasitas' => KapasitasMingguan::ringkasan(now()),
+            'ratingRataRata' => round(ProjectRating::avg('rating') ?? 0, 1),
+            'jumlahUlasan' => ProjectRating::count(),
         ]);
     }
 
