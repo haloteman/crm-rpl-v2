@@ -26,6 +26,18 @@
             <a href="{{ route('website.layanan') }}" class="btn-dark">Lihat Layanan →</a>
             <a href="{{ \App\Services\WaLinkBuilder::buildAdminInquiry() }}" target="_blank" rel="noopener" class="btn-outline">Tanya via WhatsApp</a>
         </div>
+        <div class="mt-6 flex flex-wrap gap-3 text-sm">
+            @if ($jumlahUlasan > 0)
+                <span class="rounded-full border-2 border-ink bg-white px-3 py-1.5 font-bold"><span class="text-sun">★</span> {{ number_format($ratingRataRata, 1, ',', '.') }} dari {{ $jumlahUlasan }} ulasan</span>
+            @endif
+            <span class="rounded-full border-2 border-ink px-3 py-1.5 font-bold {{ $kapasitas['status'] == 'full' ? 'bg-coral' : ($kapasitas['status'] == 'almost_full' ? 'bg-sun' : 'bg-lime') }}">
+                @if ($kapasitas['status'] == 'full')
+                    Slot minggu ini penuh, pilih tenggat minggu depan
+                @else
+                    Sisa {{ $kapasitas['sisa'] }} slot pengerjaan minggu ini
+                @endif
+            </span>
+        </div>
     </div>
 
     {{-- dekorasi --}}
