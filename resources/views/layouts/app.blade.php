@@ -4,10 +4,19 @@
     $menu = [
         ['route' => 'beranda', 'label' => 'Dashboard', 'icon' => 'dashboard'],
         ['route' => 'pesanan.index', 'label' => 'Pesanan Saya', 'icon' => 'shopping-bag', 'match' => 'pesanan.*', 'permission' => 'order.own'],
+        ['route' => 'chat.index', 'label' => 'Chat Proyek', 'icon' => 'envelope', 'match' => 'chat.*', 'permission' => ['order.own', 'order.assigned']],
+        ['route' => 'notifikasi.index', 'label' => 'Notifikasi', 'icon' => 'bell', 'match' => 'notifikasi.*', 'role' => 'Customer'],
         ['route' => 'profil.show', 'label' => 'Pengaturan', 'icon' => 'settings', 'match' => 'profil.*', 'role' => 'Customer'],
         ['route' => 'pelanggan.index', 'label' => 'Data Pelanggan', 'icon' => 'customer', 'match' => 'pelanggan.*', 'permission' => 'customer.view'],
         ['route' => 'katalog.index', 'label' => 'Katalog Layanan', 'icon' => 'folder', 'match' => 'katalog.*', 'permission' => 'service.manage'],
         ['route' => 'pesanan-masuk.index', 'label' => 'Pesanan Masuk', 'icon' => 'penawaran', 'match' => 'pesanan-masuk.*', 'permission' => 'order.view'],
+        ['route' => 'penugasan.index', 'label' => 'Proyek Belum Ditugaskan', 'icon' => 'plus', 'match' => 'penugasan.*', 'permission' => 'project.assign'],
+        ['route' => 'pemantauan.index', 'label' => 'Pemantauan Proyek', 'icon' => 'trend-up', 'match' => 'pemantauan.*', 'role' => 'Owner|Kepala Staf Desainer'],
+        ['route' => 'proyek-saya.index', 'label' => 'Proyek Saya', 'icon' => 'document', 'match' => 'proyek-saya.*', 'permission' => 'order.assigned'],
+        ['route' => 'kapasitas.index', 'label' => 'Kapasitas Mingguan', 'icon' => 'calendar', 'match' => 'kapasitas.*', 'role' => 'Owner'],
+        ['route' => 'pendapatan.index', 'label' => 'Riwayat Pendapatan', 'icon' => 'pembayaran', 'match' => 'pendapatan.*', 'permission' => 'revenue.view'],
+        ['route' => 'skema.index', 'label' => 'Skema Bagi Hasil', 'icon' => 'kesepakatan', 'match' => 'skema.*', 'permission' => 'revenue.manage'],
+        ['route' => 'rekap.index', 'label' => 'Rekap Bagi Hasil', 'icon' => 'shapes', 'match' => 'rekap.*', 'permission' => 'revenue.view'],
         ['route' => 'users.index', 'label' => 'User Management', 'icon' => 'user-cog', 'match' => 'users.*', 'permission' => 'user.view'],
     ];
 
@@ -16,7 +25,7 @@
             return auth()->user()->hasRole($item['role']);
         }
 
-        return ! isset($item['permission']) || auth()->user()->can($item['permission']);
+        return ! isset($item['permission']) || auth()->user()->canAny((array) $item['permission']);
     });
 
     $me = auth()->user();
