@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ClosureReason;
 use App\Models\Order;
+use App\Models\OrderClosure;
 use App\Models\StatusDefinition;
 use Illuminate\Http\Request;
 
@@ -38,7 +40,7 @@ class PesananMasukController extends Controller
 
     public function show(Order $order)
     {
-        $order->load('customer.customerProfile', 'service', 'status', 'references', 'statusHistories', 'consultation', 'project');
+        $order->load('customer.customerProfile', 'service', 'status', 'references', 'statusHistories', 'consultation', 'project', 'closure.reason');
 
         // nominal harga hanya untuk Owner, Admin tidak boleh menerima datanya
         if (auth()->user()->can('price.set')) {
@@ -49,6 +51,8 @@ class PesananMasukController extends Controller
             'order' => $order,
             'semuaStatus' => StatusDefinition::where('scope', 'order')->where('code', '!=', 'dibatalkan')->orderBy('sort_order')->get(),
             'labelStatus' => StatusDefinition::where('scope', 'order')->pluck('label', 'code'),
+            'alasanBatal' => ClosureReason::where('closure_type', OrderClosure::BATAL)->where('is_active', true)->orderBy('sort_order')->get(),
+            'alasanTolak' => ClosureReason::where('closure_type', OrderClosure::TOLAK)->where('is_active', true)->orderBy('sort_order')->get(),
         ]);
     }
 }

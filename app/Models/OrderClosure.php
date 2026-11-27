@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class OrderClosure extends Model
 {
+    const BATAL = 'cancelled';
+    const TOLAK = 'rejected';
+
     protected $fillable = [
         'order_id',
         'closure_type',

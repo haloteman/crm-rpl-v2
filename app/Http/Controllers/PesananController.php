@@ -110,7 +110,7 @@ class PesananController extends Controller
     {
         $this->pastikanMilikSendiri($order);
 
-        $order->load('service', 'status', 'references', 'statusHistories', 'pricing');
+        $order->load('service', 'status', 'references', 'statusHistories', 'pricing', 'closure.reason');
 
         // riwayat pembayaran customer, yang sudah dibatalkan Owner tidak ditampilkan
         $order->load(['payments' => function ($query) {
