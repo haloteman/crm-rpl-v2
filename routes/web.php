@@ -80,6 +80,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::post('/pesanan-masuk/{order}/harga/ubah', [HargaController::class, 'ubah'])->middleware('permission:price.set')->name('harga.ubah');
         Route::post('/pesanan-masuk/{order}/dp', [PembayaranController::class, 'simpanDp'])->middleware('permission:revenue.manage')->name('pembayaran.dp');
         Route::post('/pesanan-masuk/{order}/pelunasan', [PembayaranController::class, 'simpanPelunasan'])->middleware('permission:revenue.manage')->name('pembayaran.pelunasan');
+        Route::post('/pembayaran/{transaksi}/koreksi', [PembayaranController::class, 'koreksi'])->middleware('permission:revenue.manage')->name('pembayaran.koreksi');
         Route::post('/pesanan-masuk/{order}/batal', [PenutupanController::class, 'batal'])->middleware('permission:order.cancel')->name('pesanan-masuk.batal');
         Route::post('/pesanan-masuk/{order}/tolak', [PenutupanController::class, 'tolak'])->middleware('role:Owner')->name('pesanan-masuk.tolak');
     });
