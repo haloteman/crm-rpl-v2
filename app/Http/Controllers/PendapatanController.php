@@ -6,6 +6,7 @@ use App\Models\CostType;
 use App\Models\PaymentTransaction;
 use App\Models\Project;
 use App\Models\Service;
+use App\Services\RingkasanPendapatan;
 use Illuminate\Http\Request;
 
 class PendapatanController extends Controller
@@ -44,7 +45,15 @@ class PendapatanController extends Controller
             $query->where('payment_type', $request->jenis);
         }
 
+        // ringkasan per bulan, atau per tahun kalau bulan tidak dipilih
+        $tahun = $request->input('tahun', now()->year);
+        $bulan = $request->input('bulan');
+
         return view('pendapatan.index', [
+            'ringkasan' => $bulan ? RingkasanPendapatan::bulan($tahun, $bulan) : RingkasanPendapatan::tahun($tahun),
+            'perBulan' => RingkasanPendapatan::perBulan($tahun),
+            'tahun' => $tahun,
+            'bulan' => $bulan,
             'transaksi' => (clone $query)->paginate(10)->withQueryString(),
             'totalFilter' => (clone $query)->sum('amount'),
             'semuaLayanan' => Service::orderBy('sort_order')->get(),
