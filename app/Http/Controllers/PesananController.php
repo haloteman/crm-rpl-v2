@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderReference;
+use App\Models\PaymentTransaction;
 use App\Models\Service;
 use App\Models\StatusDefinition;
 use Illuminate\Http\Request;
@@ -109,6 +110,11 @@ class PesananController extends Controller
         $this->pastikanMilikSendiri($order);
 
         $order->load('service', 'status', 'references', 'statusHistories', 'pricing');
+
+        // riwayat pembayaran customer, yang sudah dibatalkan Owner tidak ditampilkan
+        $order->load(['payments' => function ($query) {
+            $query->where('status', PaymentTransaction::VALID)->orderBy('paid_at');
+        }]);
 
         return view('pesanan.show', [
             'order' => $order,
