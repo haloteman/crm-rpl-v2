@@ -50,6 +50,11 @@ class Project extends Model
         return $this->hasMany(ProjectProgressUpdate::class)->latest('id');
     }
 
+    public function costs()
+    {
+        return $this->hasMany(ProjectCost::class);
+    }
+
     public function rating()
     {
         return $this->hasOne(ProjectRating::class);

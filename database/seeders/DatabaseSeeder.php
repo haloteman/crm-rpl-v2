@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\CapacitySetting;
 use App\Models\ClosureReason;
+use App\Models\CostType;
 use App\Models\Role;
 use App\Models\Service;
 use App\Models\StatusDefinition;
@@ -167,6 +168,17 @@ class DatabaseSeeder extends Seeder
                 'label' => $label,
                 'sort_order' => $urutan + 1,
             ]);
+        }
+
+        $jenisBiaya = [
+            ['asset', 'Pembelian aset'],
+            ['ads', 'Iklan'],
+            ['tax', 'Pajak'],
+            ['other', 'Lainnya'],
+        ];
+
+        foreach ($jenisBiaya as $urutan => [$kode, $label]) {
+            CostType::create(['code' => $kode, 'label' => $label, 'sort_order' => $urutan + 1]);
         }
     }
 }

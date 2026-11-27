@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CostType;
 use App\Models\PaymentTransaction;
 use App\Models\Project;
 use App\Models\Service;
@@ -52,11 +53,17 @@ class PendapatanController extends Controller
 
     public function proyek(Project $project)
     {
-        $project->load('order.service', 'order.customer', 'order.pricing', 'order.payments', 'designer');
+        $project->load('order.service', 'order.customer', 'order.pricing', 'order.payments', 'designer', 'costs.costType');
+
+        $pendapatanKotor = $project->order->totalDibayar();
+        $totalBiaya = $project->costs->sum('amount');
 
         return view('pendapatan.proyek', [
             'project' => $project,
-            'pendapatanKotor' => $project->order->totalDibayar(),
+            'pendapatanKotor' => $pendapatanKotor,
+            'totalBiaya' => $totalBiaya,
+            'pendapatanBersih' => $pendapatanKotor - $totalBiaya,
+            'jenisBiaya' => CostType::where('is_active', true)->orderBy('sort_order')->get(),
         ]);
     }
 }

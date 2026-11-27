@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BerandaController;
+use App\Http\Controllers\BiayaController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\HargaController;
@@ -85,6 +86,9 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
     Route::middleware('permission:revenue.view')->group(function () {
         Route::get('/riwayat-pendapatan', [PendapatanController::class, 'index'])->name('pendapatan.index');
         Route::get('/riwayat-pendapatan/proyek/{project}', [PendapatanController::class, 'proyek'])->name('pendapatan.proyek');
+        Route::post('/riwayat-pendapatan/proyek/{project}/biaya', [BiayaController::class, 'simpan'])->middleware('permission:revenue.manage')->name('biaya.simpan');
+        Route::post('/biaya-proyek/{biaya}/ubah', [BiayaController::class, 'ubah'])->middleware('permission:revenue.manage')->name('biaya.ubah');
+        Route::post('/biaya-proyek/{biaya}/hapus', [BiayaController::class, 'hapus'])->middleware('permission:revenue.manage')->name('biaya.hapus');
     });
 
     Route::middleware('role:Owner')->group(function () {
