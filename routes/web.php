@@ -14,6 +14,7 @@ use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PemantauanController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\PendapatanController;
 use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\PenutupanController;
 use App\Http\Controllers\PesananController;
@@ -79,6 +80,10 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::post('/pesanan-masuk/{order}/pelunasan', [PembayaranController::class, 'simpanPelunasan'])->middleware('permission:revenue.manage')->name('pembayaran.pelunasan');
         Route::post('/pesanan-masuk/{order}/batal', [PenutupanController::class, 'batal'])->middleware('permission:order.cancel')->name('pesanan-masuk.batal');
         Route::post('/pesanan-masuk/{order}/tolak', [PenutupanController::class, 'tolak'])->middleware('role:Owner')->name('pesanan-masuk.tolak');
+    });
+
+    Route::middleware('permission:revenue.view')->group(function () {
+        Route::get('/riwayat-pendapatan', [PendapatanController::class, 'index'])->name('pendapatan.index');
     });
 
     Route::middleware('role:Owner')->group(function () {
