@@ -27,6 +27,11 @@ class ProjectSettlement extends Model
         ];
     }
 
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
     public function shares()
     {
         return $this->hasMany(ProjectSettlementShare::class, 'settlement_id');
