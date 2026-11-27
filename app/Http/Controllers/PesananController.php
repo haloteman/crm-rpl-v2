@@ -20,6 +20,24 @@ class PesananController extends Controller
             'layanan' => Service::where('slug', $slug)->where('is_active', true)->firstOrFail(),
             'user' => auth()->user(),
             'kapasitasMinggu' => KapasitasMingguan::beberapaMinggu(26),
+            'pesananAsal' => null,
+        ]);
+    }
+
+    // Pesan Lagi: form baru terisi layanan dan kebutuhan dari pesanan sebelumnya
+    public function pesanLagi(Order $order)
+    {
+        $this->pastikanMilikSendiri($order);
+
+        if (! $order->service->is_active) {
+            abort(404);
+        }
+
+        return view('pesanan.form', [
+            'layanan' => $order->service,
+            'user' => auth()->user(),
+            'kapasitasMinggu' => KapasitasMingguan::beberapaMinggu(26),
+            'pesananAsal' => $order,
         ]);
     }
 
@@ -35,6 +53,7 @@ class PesananController extends Controller
             'referensi_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'referensi_link' => 'nullable|url|max:2048',
             'extra.*' => 'nullable|max:255',
+            'reorder_from_id' => 'nullable|integer',
         ], [
             'title.required' => 'Judul proyek wajib diisi',
             'title.max' => 'Judul proyek maksimal 255 karakter',
@@ -60,6 +79,7 @@ class PesananController extends Controller
         }
 
         $user = auth()->user();
+        $pesananAsal = Order::where('customer_id', $user->id)->find($request->reorder_from_id);
         $statusAwal = StatusDefinition::pesanan('menunggu_konsultasi');
 
         // nama dan nomor HP disalin dari akun saat pesanan diajukan
@@ -70,6 +90,7 @@ class PesananController extends Controller
             'status_id' => $statusAwal->id,
             'created_by' => $user->id,
             'created_via' => 'customer',
+            'reorder_from_id' => $pesananAsal?->id,
             'title' => $request->title,
             'description' => $request->description,
             'expected_deadline' => $request->expected_deadline,
