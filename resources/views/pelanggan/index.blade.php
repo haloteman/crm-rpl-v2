@@ -15,7 +15,8 @@
         <select name="status" class="field sm:w-48">
             <option value="">Semua Status</option>
             <option value="lead" @selected(request('status') === 'lead')>Lead</option>
-            <option value="customer" @selected(request('status') === 'customer')>Customer</option>
+            <option value="new_customer" @selected(request('status') === 'new_customer')>New Customer</option>
+            <option value="returning_customer" @selected(request('status') === 'returning_customer')>Pelanggan Lama</option>
         </select>
         <button type="submit" class="btn-outline">Cari</button>
     </form>
@@ -43,7 +44,7 @@
                     </td>
                     <td class="block py-1 text-slate-500 md:table-cell md:px-5 md:py-3">{{ $pelanggan->customerProfile->institution ?? '—' }}</td>
                     <td class="block py-1 md:table-cell md:px-5 md:py-3">
-                        <span class="badge {{ $pelanggan->customerProfile->status === 'lead' ? 'badge-amber' : 'badge-green' }}">{{ ucfirst($pelanggan->customerProfile->status) }}</span>
+                        <span class="badge {{ $pelanggan->customerProfile->status === 'lead' ? 'badge-amber' : 'badge-green' }}">{{ ['lead' => 'Lead', 'new_customer' => 'New Customer', 'returning_customer' => 'Pelanggan Lama'][$pelanggan->customerProfile->status] }}</span>
                     </td>
                     <td class="block py-1 text-slate-500 md:table-cell md:px-5 md:py-3">{{ $pelanggan->customerProfile->registered_at->format('d/m/Y') }}</td>
                 </tr>

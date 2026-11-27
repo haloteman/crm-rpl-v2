@@ -26,7 +26,7 @@
         <dt class="text-slate-500">Email</dt><dd class="break-words font-medium">{{ $pelanggan->email }}</dd>
         <dt class="text-slate-500">Nomor HP</dt><dd class="break-words font-medium">{{ $pelanggan->customerProfile->phone }}</dd>
         <dt class="text-slate-500">Instansi</dt><dd class="font-medium">{{ $pelanggan->customerProfile->institution ?? '—' }}</dd>
-        <dt class="text-slate-500">Status</dt><dd class="font-medium">{{ ucfirst($pelanggan->customerProfile->status) }}</dd>
+        <dt class="text-slate-500">Status</dt><dd class="font-medium">{{ ['lead' => 'Lead', 'new_customer' => 'New Customer', 'returning_customer' => 'Pelanggan Lama'][$pelanggan->customerProfile->status] }}</dd>
         <dt class="text-slate-500">Sumber</dt><dd class="font-medium">{{ ucfirst($pelanggan->customerProfile->lead_source) }}</dd>
     </dl>
 </section>
