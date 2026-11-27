@@ -60,6 +60,12 @@ class Project extends Model
         return $this->hasMany(ProjectAssignment::class);
     }
 
+    // negatif berarti sudah lewat tenggat
+    public function sisaHari()
+    {
+        return (int) now()->startOfDay()->diffInDays($this->deadline, false);
+    }
+
     public function bolehPindahKe($kode)
     {
         return in_array($kode, $this->status->allowed_next ?? []);

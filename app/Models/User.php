@@ -66,6 +66,18 @@ class User extends Authenticatable
         return $this->hasMany(Project::class, 'designer_id');
     }
 
+    // desainer dan kepala staf beserta keahlian dan jumlah proyek aktif, untuk menimbang beban kerja
+    public static function daftarDesainer()
+    {
+        return static::role([Role::DESAINER, Role::KEPALA_STAF_DESAINER])
+            ->with('designerSkills.service')
+            ->withCount(['projects as proyek_aktif' => function ($query) {
+                $query->whereRelation('status', 'code', '!=', 'selesai');
+            }])
+            ->orderBy('name')
+            ->get();
+    }
+
     // tidak ada yang bisa reset atau hapus akunnya sendiri, dan akun Owner tidak bisa dihapus
     public function canResetPassword($target)
     {

@@ -20,7 +20,7 @@ class PenugasanController extends Controller
 
         return view('penugasan.index', [
             'proyek' => $proyek,
-            'desainer' => $this->daftarDesainer(),
+            'desainer' => User::daftarDesainer(),
         ]);
     }
 
@@ -120,17 +120,5 @@ class PenugasanController extends Controller
         $project->update(['designer_id' => $desainer->id]);
 
         return back()->with('status', 'Proyek berhasil dipindahkan ke '.$desainer->name);
-    }
-
-    // keahlian dan jumlah proyek aktif dipakai untuk menimbang beban kerja
-    private function daftarDesainer()
-    {
-        return User::role([Role::DESAINER, Role::KEPALA_STAF_DESAINER])
-            ->with('designerSkills.service')
-            ->withCount(['projects as proyek_aktif' => function ($query) {
-                $query->whereRelation('status', 'code', '!=', 'selesai');
-            }])
-            ->orderBy('name')
-            ->get();
     }
 }

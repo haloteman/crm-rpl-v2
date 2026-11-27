@@ -11,6 +11,7 @@ use App\Http\Controllers\LampiranController;
 use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\PemantauanController;
 use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\PenutupanController;
@@ -81,6 +82,11 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
     Route::middleware('role:Owner')->group(function () {
         Route::get('/kapasitas-mingguan', [KapasitasController::class, 'index'])->name('kapasitas.index');
         Route::post('/kapasitas-mingguan', [KapasitasController::class, 'simpan'])->name('kapasitas.simpan');
+    });
+
+    Route::middleware('role:Owner|Kepala Staf Desainer')->group(function () {
+        Route::get('/pemantauan-proyek', [PemantauanController::class, 'index'])->name('pemantauan.index');
+        Route::get('/pemantauan-proyek/{project}', [PemantauanController::class, 'show'])->name('pemantauan.show');
     });
 
     Route::middleware('permission:project.assign')->group(function () {
