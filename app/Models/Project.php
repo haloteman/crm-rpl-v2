@@ -45,6 +45,11 @@ class Project extends Model
         return $this->belongsTo(User::class, 'designer_id');
     }
 
+    public function progressUpdates()
+    {
+        return $this->hasMany(ProjectProgressUpdate::class)->latest('id');
+    }
+
     public function assignments()
     {
         return $this->hasMany(ProjectAssignment::class);

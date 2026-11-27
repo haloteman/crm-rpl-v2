@@ -13,6 +13,7 @@ use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PesananMasukController;
 use App\Http\Controllers\ProfilController;
+use App\Http\Controllers\ProyekSayaController;
 use App\Http\Controllers\ReferensiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
@@ -73,6 +74,14 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
     Route::middleware('permission:project.assign')->group(function () {
         Route::get('/penugasan-proyek', [PenugasanController::class, 'index'])->name('penugasan.index');
         Route::post('/penugasan-proyek/{project}', [PenugasanController::class, 'simpan'])->name('penugasan.simpan');
+    });
+
+    Route::middleware('permission:order.assigned')->group(function () {
+        Route::get('/proyek-saya', [ProyekSayaController::class, 'index'])->name('proyek-saya.index');
+        Route::get('/proyek-saya/{project}', [ProyekSayaController::class, 'show'])->name('proyek-saya.show');
+        Route::post('/proyek-saya/{project}/progres', [ProyekSayaController::class, 'progres'])->middleware('permission:progress.update')->name('proyek-saya.progres');
+        Route::post('/proyek-saya/{project}/revisi', [ProyekSayaController::class, 'revisi'])->middleware('permission:progress.update')->name('proyek-saya.revisi');
+        Route::post('/proyek-saya/{project}/selesai', [ProyekSayaController::class, 'selesai'])->middleware('permission:progress.update')->name('proyek-saya.selesai');
     });
 
     Route::get('/referensi/{referensi}', [ReferensiController::class, 'unduh'])->name('referensi.unduh');
