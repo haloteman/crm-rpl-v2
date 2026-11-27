@@ -6,6 +6,7 @@ use App\Models\CustomerProfile;
 use App\Models\Order;
 use App\Models\PaymentTransaction;
 use App\Models\StatusDefinition;
+use App\Services\PembagianHasil;
 use Illuminate\Http\Request;
 
 class PembayaranController extends Controller
@@ -101,6 +102,8 @@ class PembayaranController extends Controller
         // pelunasan boleh bertahap, status Lunas kalau sisa tagihan sudah nol
         if ($request->amount == $sisa) {
             $order->update(['payment_status' => Order::LUNAS]);
+
+            PembagianHasil::hitung($order->project);
         }
 
         return redirect()->route('pesanan-masuk.show', $order)->with('status', 'Pelunasan berhasil dicatat');
@@ -174,6 +177,8 @@ class PembayaranController extends Controller
 
         if ($order->sisaTagihan() <= 0) {
             $order->update(['payment_status' => Order::LUNAS]);
+
+            PembagianHasil::hitung($order->project);
         } else {
             $order->update(['payment_status' => Order::DP_DITERIMA]);
         }

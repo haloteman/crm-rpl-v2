@@ -62,7 +62,7 @@ class PendapatanController extends Controller
 
     public function proyek(Project $project)
     {
-        $project->load('order.service', 'order.customer', 'order.pricing', 'order.payments', 'designer', 'costs.costType');
+        $project->load('order.service', 'order.customer', 'order.pricing', 'order.payments', 'designer', 'costs.costType', 'settlement.shares.party', 'settlement.shares.recipient');
 
         $pendapatanKotor = $project->order->totalDibayar();
         $totalBiaya = $project->costs->sum('amount');

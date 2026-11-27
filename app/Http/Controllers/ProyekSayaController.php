@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ProgressAttachment;
 use App\Models\Project;
+use App\Services\PembagianHasil;
 use Illuminate\Http\Request;
 
 class ProyekSayaController extends Controller
@@ -125,6 +126,8 @@ class ProyekSayaController extends Controller
         $project->completed_at = now();
         $project->ubahStatus('selesai');
         $project->order->ubahStatus('selesai');
+
+        PembagianHasil::hitung($project);
 
         return redirect()->route('proyek-saya.show', $project)->with('status', 'Proyek ditandai Selesai');
     }

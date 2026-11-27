@@ -55,6 +55,11 @@ class Project extends Model
         return $this->hasMany(ProjectCost::class);
     }
 
+    public function settlement()
+    {
+        return $this->hasOne(ProjectSettlement::class);
+    }
+
     public function rating()
     {
         return $this->hasOne(ProjectRating::class);
