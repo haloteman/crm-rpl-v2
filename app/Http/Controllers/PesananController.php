@@ -9,6 +9,7 @@ use App\Models\ProgressAttachment;
 use App\Models\Service;
 use App\Models\StatusDefinition;
 use App\Services\KapasitasMingguan;
+use App\Services\TimelineProyek;
 use Illuminate\Http\Request;
 
 class PesananController extends Controller
@@ -143,6 +144,7 @@ class PesananController extends Controller
         return view('pesanan.tracking', [
             'order' => $order,
             'hasilAkhir' => $hasilAkhir,
+            'timeline' => $order->project ? TimelineProyek::untuk($order->project) : collect(),
             'labelStatus' => StatusDefinition::where('scope', 'order')->pluck('customer_label', 'code'),
         ]);
     }
