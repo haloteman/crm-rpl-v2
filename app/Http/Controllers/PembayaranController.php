@@ -65,4 +65,43 @@ class PembayaranController extends Controller
 
         return redirect()->route('pesanan-masuk.show', $order)->with('status', 'DP berhasil dicatat, proyek sudah dibuat');
     }
+
+    public function simpanPelunasan(Request $request, Order $order)
+    {
+        if ($order->payment_status != Order::DP_DITERIMA) {
+            abort(403);
+        }
+
+        $sisa = $order->sisaTagihan();
+
+        $request->validate([
+            'amount' => 'required|numeric|min:1|max:'.$sisa,
+            'paid_at' => 'required|date|before_or_equal:today',
+            'method' => 'required|in:transfer,qris',
+        ], [
+            'amount.required' => 'Nominal pelunasan wajib diisi',
+            'amount.min' => 'Nominal pelunasan harus lebih dari 0',
+            'amount.max' => 'Nominal melebihi sisa tagihan',
+            'paid_at.required' => 'Tanggal pembayaran wajib diisi',
+            'paid_at.before_or_equal' => 'Tanggal pembayaran tidak boleh lebih dari hari ini',
+            'method.required' => 'Metode pembayaran wajib dipilih',
+        ]);
+
+        $order->payments()->create([
+            'customer_id' => $order->customer_id,
+            'payment_type' => PaymentTransaction::PELUNASAN,
+            'amount' => $request->amount,
+            'paid_at' => $request->paid_at,
+            'method' => $request->method,
+            'recorded_by' => auth()->id(),
+            'status' => PaymentTransaction::VALID,
+        ]);
+
+        // pelunasan boleh bertahap, status Lunas kalau sisa tagihan sudah nol
+        if ($request->amount == $sisa) {
+            $order->update(['payment_status' => Order::LUNAS]);
+        }
+
+        return redirect()->route('pesanan-masuk.show', $order)->with('status', 'Pelunasan berhasil dicatat');
+    }
 }

@@ -72,6 +72,16 @@ class Order extends Model
         return $this->hasMany(PaymentTransaction::class);
     }
 
+    public function totalDibayar()
+    {
+        return $this->payments->where('status', PaymentTransaction::VALID)->sum('amount');
+    }
+
+    public function sisaTagihan()
+    {
+        return $this->pricing->final_price - $this->totalDibayar();
+    }
+
     public function project()
     {
         return $this->hasOne(Project::class);

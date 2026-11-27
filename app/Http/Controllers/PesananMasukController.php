@@ -12,6 +12,11 @@ class PesananMasukController extends Controller
     {
         $query = Order::with('customer.customerProfile', 'service', 'status')->latest();
 
+        // sisa pelunasan hanya untuk Owner
+        if (auth()->user()->can('price.set')) {
+            $query->with('pricing', 'payments');
+        }
+
         if ($request->filled('cari')) {
             $query->where(function ($q) use ($request) {
                 $q->where('order_code', 'like', '%'.$request->cari.'%')

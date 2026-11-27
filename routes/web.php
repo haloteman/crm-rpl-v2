@@ -66,6 +66,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::post('/pesanan-masuk/{order}/konsultasi', [KonsultasiController::class, 'simpan'])->middleware('permission:consult.note')->name('konsultasi.simpan');
         Route::post('/pesanan-masuk/{order}/harga', [HargaController::class, 'simpan'])->middleware('permission:price.set')->name('harga.simpan');
         Route::post('/pesanan-masuk/{order}/dp', [PembayaranController::class, 'simpanDp'])->middleware('permission:revenue.manage')->name('pembayaran.dp');
+        Route::post('/pesanan-masuk/{order}/pelunasan', [PembayaranController::class, 'simpanPelunasan'])->middleware('permission:revenue.manage')->name('pembayaran.pelunasan');
     });
 
     Route::get('/referensi/{referensi}', [ReferensiController::class, 'unduh'])->name('referensi.unduh');
