@@ -61,6 +61,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/pesanan/{order}/terkirim', [PesananController::class, 'terkirim'])->name('pesanan.terkirim');
         Route::get('/pesanan-saya', [PesananController::class, 'index'])->name('pesanan.index');
         Route::get('/pesanan-saya/{order}', [PesananController::class, 'show'])->name('pesanan.show');
+        Route::get('/pesanan-saya/{order}/tracking', [PesananController::class, 'tracking'])->name('pesanan.tracking');
     });
 
     Route::middleware('permission:order.view')->group(function () {

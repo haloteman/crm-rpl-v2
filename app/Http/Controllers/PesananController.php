@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Order;
 use App\Models\OrderReference;
 use App\Models\PaymentTransaction;
+use App\Models\ProgressAttachment;
 use App\Models\Service;
 use App\Models\StatusDefinition;
 use Illuminate\Http\Request;
@@ -118,6 +119,28 @@ class PesananController extends Controller
 
         return view('pesanan.show', [
             'order' => $order,
+            'labelStatus' => StatusDefinition::where('scope', 'order')->pluck('customer_label', 'code'),
+        ]);
+    }
+
+    public function tracking(Order $order)
+    {
+        $this->pastikanMilikSendiri($order);
+
+        $order->load('service', 'status', 'statusHistories', 'project.status', 'project.progressUpdates.attachments');
+
+        // hasil akhir baru dibuka setelah proyek selesai
+        $hasilAkhir = collect();
+
+        if ($order->project?->status->code == 'selesai') {
+            $hasilAkhir = ProgressAttachment::where('is_final_result', true)
+                ->whereRelation('progressUpdate', 'project_id', $order->project->id)
+                ->get();
+        }
+
+        return view('pesanan.tracking', [
+            'order' => $order,
+            'hasilAkhir' => $hasilAkhir,
             'labelStatus' => StatusDefinition::where('scope', 'order')->pluck('customer_label', 'code'),
         ]);
     }
