@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\CustomerProfile;
 use App\Models\Order;
+use App\Models\PaymentProof;
 use App\Models\PaymentTransaction;
 use App\Models\StatusDefinition;
 use App\Services\PembagianHasil;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PembayaranController extends Controller
 {
@@ -22,6 +24,7 @@ class PembayaranController extends Controller
             'amount' => 'required|numeric|min:1|max:'.$order->pricing->final_price,
             'paid_at' => 'required|date|before_or_equal:today',
             'method' => 'required|in:transfer,qris',
+            'bukti' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ], [
             'amount.required' => 'Nominal diterima wajib diisi',
             'amount.min' => 'Nominal diterima harus lebih dari 0',
@@ -29,9 +32,11 @@ class PembayaranController extends Controller
             'paid_at.required' => 'Tanggal diterima wajib diisi',
             'paid_at.before_or_equal' => 'Tanggal diterima tidak boleh lebih dari hari ini',
             'method.required' => 'Metode pembayaran wajib dipilih',
+            'bukti.mimes' => 'Bukti pembayaran harus JPG, PNG, atau PDF',
+            'bukti.max' => 'Bukti pembayaran maksimal 10 MB',
         ]);
 
-        $order->payments()->create([
+        $transaksiBaru = $order->payments()->create([
             'customer_id' => $order->customer_id,
             'payment_type' => PaymentTransaction::DP,
             'amount' => $request->amount,
@@ -40,6 +45,8 @@ class PembayaranController extends Controller
             'recorded_by' => auth()->id(),
             'status' => PaymentTransaction::VALID,
         ]);
+
+        $this->simpanBukti($request, $transaksiBaru);
 
         $order->payment_status = Order::DP_DITERIMA;
         $order->ubahStatus('dp_diterima');
@@ -80,6 +87,7 @@ class PembayaranController extends Controller
             'amount' => 'required|numeric|min:1|max:'.$sisa,
             'paid_at' => 'required|date|before_or_equal:today',
             'method' => 'required|in:transfer,qris',
+            'bukti' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
         ], [
             'amount.required' => 'Nominal pelunasan wajib diisi',
             'amount.min' => 'Nominal pelunasan harus lebih dari 0',
@@ -87,9 +95,11 @@ class PembayaranController extends Controller
             'paid_at.required' => 'Tanggal pembayaran wajib diisi',
             'paid_at.before_or_equal' => 'Tanggal pembayaran tidak boleh lebih dari hari ini',
             'method.required' => 'Metode pembayaran wajib dipilih',
+            'bukti.mimes' => 'Bukti pembayaran harus JPG, PNG, atau PDF',
+            'bukti.max' => 'Bukti pembayaran maksimal 10 MB',
         ]);
 
-        $order->payments()->create([
+        $transaksiBaru = $order->payments()->create([
             'customer_id' => $order->customer_id,
             'payment_type' => PaymentTransaction::PELUNASAN,
             'amount' => $request->amount,
@@ -98,6 +108,8 @@ class PembayaranController extends Controller
             'recorded_by' => auth()->id(),
             'status' => PaymentTransaction::VALID,
         ]);
+
+        $this->simpanBukti($request, $transaksiBaru);
 
         // pelunasan boleh bertahap, status Lunas kalau sisa tagihan sudah nol
         if ($request->amount == $sisa) {
@@ -142,6 +154,7 @@ class PembayaranController extends Controller
                 'amount' => 'required|numeric|min:1|max:'.$sisa,
                 'paid_at' => 'required|date|before_or_equal:today',
                 'method' => 'required|in:transfer,qris',
+                'bukti' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             ], [
                 'amount.required' => 'Nominal wajib diisi',
                 'amount.min' => 'Nominal harus lebih dari 0',
@@ -149,6 +162,8 @@ class PembayaranController extends Controller
                 'paid_at.required' => 'Tanggal pembayaran wajib diisi',
                 'paid_at.before_or_equal' => 'Tanggal pembayaran tidak boleh lebih dari hari ini',
                 'method.required' => 'Metode pembayaran wajib dipilih',
+                'bukti.mimes' => 'Bukti pembayaran harus JPG, PNG, atau PDF',
+                'bukti.max' => 'Bukti pembayaran maksimal 10 MB',
             ]);
         }
 
@@ -160,7 +175,7 @@ class PembayaranController extends Controller
         ]);
 
         if ($request->aksi == 'koreksi') {
-            $order->payments()->create([
+            $transaksiBaru = $order->payments()->create([
                 'customer_id' => $order->customer_id,
                 'payment_type' => $transaksi->payment_type,
                 'amount' => $request->amount,
@@ -170,6 +185,8 @@ class PembayaranController extends Controller
                 'status' => PaymentTransaction::VALID,
                 'replaces_id' => $transaksi->id,
             ]);
+
+            $this->simpanBukti($request, $transaksiBaru);
         }
 
         // status pembayaran dihitung ulang dari transaksi yang masih valid
@@ -184,5 +201,26 @@ class PembayaranController extends Controller
         }
 
         return redirect()->route('pesanan-masuk.show', $order)->with('status', 'Pencatatan pembayaran berhasil diperbaiki');
+    }
+
+    public function unduhBukti(PaymentProof $bukti)
+    {
+        return Storage::download($bukti->file_path, $bukti->original_name);
+    }
+
+    private function simpanBukti(Request $request, PaymentTransaction $transaksi)
+    {
+        if (! $request->hasFile('bukti')) {
+            return;
+        }
+
+        $file = $request->file('bukti');
+
+        $transaksi->proofs()->create([
+            'file_path' => $file->store('bukti-pembayaran'),
+            'original_name' => $file->getClientOriginalName(),
+            'mime_type' => $file->getMimeType(),
+            'file_size' => $file->getSize(),
+        ]);
     }
 }

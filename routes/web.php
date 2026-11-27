@@ -94,6 +94,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::post('/biaya-proyek/{biaya}/ubah', [BiayaController::class, 'ubah'])->middleware('permission:revenue.manage')->name('biaya.ubah');
         Route::get('/skema-bagi-hasil', [SkemaBagiHasilController::class, 'index'])->middleware('permission:revenue.manage')->name('skema.index');
         Route::post('/skema-bagi-hasil', [SkemaBagiHasilController::class, 'simpan'])->middleware('permission:revenue.manage')->name('skema.simpan');
+        Route::get('/bukti-pembayaran/{bukti}', [PembayaranController::class, 'unduhBukti'])->name('bukti.unduh');
         Route::get('/rekap-bagi-hasil', [RekapBagiHasilController::class, 'index'])->name('rekap.index');
         Route::post('/rekap-bagi-hasil/kas', [RekapBagiHasilController::class, 'simpanKas'])->middleware('permission:revenue.manage')->name('rekap.kas');
         Route::post('/biaya-proyek/{biaya}/hapus', [BiayaController::class, 'hapus'])->middleware('permission:revenue.manage')->name('biaya.hapus');

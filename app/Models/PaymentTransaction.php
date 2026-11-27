@@ -40,4 +40,9 @@ class PaymentTransaction extends Model
     {
         return $this->belongsTo(Order::class);
     }
+
+    public function proofs()
+    {
+        return $this->hasMany(PaymentProof::class, 'transaction_id');
+    }
 }
