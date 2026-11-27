@@ -18,6 +18,7 @@ use App\Http\Controllers\PembayaranController;
 use App\Http\Controllers\PendapatanController;
 use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\PenutupanController;
+use App\Http\Controllers\PesananAtasNamaController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PesananMasukController;
 use App\Http\Controllers\ProfilController;
@@ -77,6 +78,8 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
 
     Route::middleware('permission:order.view')->group(function () {
         Route::get('/pesanan-masuk', [PesananMasukController::class, 'index'])->name('pesanan-masuk.index');
+        Route::get('/pesanan-masuk/buat', [PesananAtasNamaController::class, 'create'])->middleware('permission:order.create-for')->name('pesanan-masuk.create');
+        Route::post('/pesanan-masuk/buat', [PesananAtasNamaController::class, 'store'])->middleware('permission:order.create-for')->name('pesanan-masuk.store');
         Route::get('/pesanan-masuk/{order}', [PesananMasukController::class, 'show'])->name('pesanan-masuk.show');
         Route::post('/pesanan-masuk/{order}/konsultasi', [KonsultasiController::class, 'simpan'])->middleware('permission:consult.note')->name('konsultasi.simpan');
         Route::post('/pesanan-masuk/{order}/harga', [HargaController::class, 'simpan'])->middleware('permission:price.set')->name('harga.simpan');
