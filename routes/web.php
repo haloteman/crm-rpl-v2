@@ -23,6 +23,7 @@ use App\Http\Controllers\PesananMasukController;
 use App\Http\Controllers\ProfilController;
 use App\Http\Controllers\ProyekSayaController;
 use App\Http\Controllers\ReferensiController;
+use App\Http\Controllers\SkemaBagiHasilController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WebsiteController;
 use Illuminate\Support\Facades\Route;
@@ -90,6 +91,8 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::get('/riwayat-pendapatan/proyek/{project}', [PendapatanController::class, 'proyek'])->name('pendapatan.proyek');
         Route::post('/riwayat-pendapatan/proyek/{project}/biaya', [BiayaController::class, 'simpan'])->middleware('permission:revenue.manage')->name('biaya.simpan');
         Route::post('/biaya-proyek/{biaya}/ubah', [BiayaController::class, 'ubah'])->middleware('permission:revenue.manage')->name('biaya.ubah');
+        Route::get('/skema-bagi-hasil', [SkemaBagiHasilController::class, 'index'])->middleware('permission:revenue.manage')->name('skema.index');
+        Route::post('/skema-bagi-hasil', [SkemaBagiHasilController::class, 'simpan'])->middleware('permission:revenue.manage')->name('skema.simpan');
         Route::post('/biaya-proyek/{biaya}/hapus', [BiayaController::class, 'hapus'])->middleware('permission:revenue.manage')->name('biaya.hapus');
     });
 

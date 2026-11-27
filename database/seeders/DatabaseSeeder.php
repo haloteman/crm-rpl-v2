@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use App\Models\CapacitySetting;
 use App\Models\ClosureReason;
 use App\Models\CostType;
+use App\Models\ProfitShareParty;
+use App\Models\ProfitShareScheme;
 use App\Models\Role;
 use App\Models\Service;
 use App\Models\StatusDefinition;
@@ -179,6 +181,25 @@ class DatabaseSeeder extends Seeder
 
         foreach ($jenisBiaya as $urutan => [$kode, $label]) {
             CostType::create(['code' => $kode, 'label' => $label, 'sort_order' => $urutan + 1]);
+        }
+
+        // persentase sementara, menunggu konfirmasi client
+        $skema = ProfitShareScheme::create([
+            'label' => 'Skema awal (sementara)',
+            'effective_from' => '2026-01-01',
+            'created_by' => User::role(Role::OWNER)->first()->id,
+        ]);
+
+        $pihakBagiHasil = [
+            [ProfitShareParty::PERUSAHAAN_OWNER, 'Kas Perusahaan dan Owner', 45],
+            [ProfitShareParty::DESAINER, 'Desainer', 28],
+            [ProfitShareParty::KEPALA_STAF, 'Kepala Staf Desainer', 15],
+            [ProfitShareParty::ADMIN, 'Admin CRM atau Marketing', 12],
+        ];
+
+        foreach ($pihakBagiHasil as $urutan => [$kode, $label, $persen]) {
+            $pihak = ProfitShareParty::create(['code' => $kode, 'label' => $label, 'sort_order' => $urutan + 1]);
+            $skema->items()->create(['party_id' => $pihak->id, 'percent' => $persen]);
         }
     }
 }
