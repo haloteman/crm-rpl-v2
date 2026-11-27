@@ -15,4 +15,14 @@ class ProjectProgressUpdate extends Model
         'percentage',
         'note',
     ];
+
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(ProgressAttachment::class, 'progress_update_id');
+    }
 }

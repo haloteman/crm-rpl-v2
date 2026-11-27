@@ -5,6 +5,7 @@ use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\HargaController;
 use App\Http\Controllers\KatalogController;
 use App\Http\Controllers\KonsultasiController;
+use App\Http\Controllers\LampiranController;
 use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
@@ -85,6 +86,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
     });
 
     Route::get('/referensi/{referensi}', [ReferensiController::class, 'unduh'])->name('referensi.unduh');
+    Route::get('/lampiran/{lampiran}', [LampiranController::class, 'unduh'])->name('lampiran.unduh');
 
     Route::middleware('permission:service.manage')->group(function () {
         Route::get('/katalog-layanan', [KatalogController::class, 'index'])->name('katalog.index');

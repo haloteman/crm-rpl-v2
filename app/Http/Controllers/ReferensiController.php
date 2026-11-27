@@ -7,11 +7,13 @@ use Illuminate\Support\Facades\Storage;
 
 class ReferensiController extends Controller
 {
-    // file referensi hanya bisa diunduh pemilik pesanan atau pengguna internal yang boleh lihat pesanan
+    // file referensi hanya bisa diunduh pemilik pesanan, desainer proyeknya, atau pengguna internal yang boleh lihat pesanan
     public function unduh(OrderReference $referensi)
     {
         $order = $referensi->order;
-        $boleh = $order->customer_id === auth()->id() || auth()->user()->can('order.view');
+        $boleh = $order->customer_id === auth()->id()
+            || $order->project?->designer_id === auth()->id()
+            || auth()->user()->can('order.view');
 
         if (! $boleh || $referensi->reference_type !== OrderReference::FILE) {
             abort(404);
