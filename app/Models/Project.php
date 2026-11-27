@@ -50,6 +50,11 @@ class Project extends Model
         return $this->hasMany(ProjectProgressUpdate::class)->latest('id');
     }
 
+    public function chat()
+    {
+        return $this->hasOne(ProjectChat::class);
+    }
+
     public function assignments()
     {
         return $this->hasMany(ProjectAssignment::class);

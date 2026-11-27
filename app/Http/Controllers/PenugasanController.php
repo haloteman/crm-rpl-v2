@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ChatParticipant;
 use App\Models\Project;
 use App\Models\ProjectAssignment;
 use App\Models\Role;
@@ -54,6 +55,21 @@ class PenugasanController extends Controller
         $project->ubahStatus('dikerjakan');
 
         $project->order->ubahStatus('dikerjakan');
+
+        // chat customer dengan desainer dibuka setelah proyek ditugaskan
+        $chat = $project->chat()->create(['opened_at' => now()]);
+
+        $chat->participants()->create([
+            'user_id' => $project->order->customer_id,
+            'participant_role' => ChatParticipant::CUSTOMER,
+            'joined_at' => now(),
+        ]);
+
+        $chat->participants()->create([
+            'user_id' => $desainer->id,
+            'participant_role' => ChatParticipant::DESAINER,
+            'joined_at' => now(),
+        ]);
 
         return redirect()->route('penugasan.index')->with('status', 'Proyek berhasil ditugaskan ke '.$desainer->name);
     }

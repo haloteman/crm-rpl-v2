@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\CustomerAuthController;
 use App\Http\Controllers\HargaController;
 use App\Http\Controllers\KapasitasController;
@@ -94,6 +95,11 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::post('/proyek-saya/{project}/revisi', [ProyekSayaController::class, 'revisi'])->middleware('permission:progress.update')->name('proyek-saya.revisi');
         Route::post('/proyek-saya/{project}/selesai', [ProyekSayaController::class, 'selesai'])->middleware('permission:progress.update')->name('proyek-saya.selesai');
     });
+
+    Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+    Route::get('/chat/{chat}', [ChatController::class, 'show'])->name('chat.show');
+    Route::post('/chat/{chat}', [ChatController::class, 'kirim'])->name('chat.kirim');
+    Route::get('/lampiran-chat/{lampiran}', [ChatController::class, 'unduh'])->name('chat.unduh');
 
     Route::get('/referensi/{referensi}', [ReferensiController::class, 'unduh'])->name('referensi.unduh');
     Route::get('/lampiran/{lampiran}', [LampiranController::class, 'unduh'])->name('lampiran.unduh');
