@@ -33,11 +33,11 @@ class PesananMasukController extends Controller
 
     public function show(Order $order)
     {
-        $order->load('customer.customerProfile', 'service', 'status', 'references', 'statusHistories', 'consultation');
+        $order->load('customer.customerProfile', 'service', 'status', 'references', 'statusHistories', 'consultation', 'project');
 
         // nominal harga hanya untuk Owner, Admin tidak boleh menerima datanya
         if (auth()->user()->can('price.set')) {
-            $order->load('pricing');
+            $order->load('pricing', 'payments');
         }
 
         return view('pesanan-masuk.show', [

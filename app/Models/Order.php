@@ -6,11 +6,16 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
+    const BELUM_BAYAR = 'unpaid';
+    const DP_DITERIMA = 'dp_received';
+    const LUNAS = 'paid';
+
     protected $fillable = [
         'order_code',
         'customer_id',
         'service_id',
         'status_id',
+        'payment_status',
         'created_by',
         'created_via',
         'reorder_from_id',
@@ -62,6 +67,16 @@ class Order extends Model
         return $this->hasOne(OrderPricing::class);
     }
 
+    public function payments()
+    {
+        return $this->hasMany(PaymentTransaction::class);
+    }
+
+    public function project()
+    {
+        return $this->hasOne(Project::class);
+    }
+
     public function closure()
     {
         return $this->hasOne(OrderClosure::class);
@@ -89,7 +104,8 @@ class Order extends Model
             'changed_at' => now(),
         ]);
 
-        $this->update(['status_id' => $statusBaru->id]);
+        $this->status()->associate($statusBaru);
+        $this->save();
     }
 
     // contoh kode: ORD-0001

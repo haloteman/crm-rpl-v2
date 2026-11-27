@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class CustomerProfile extends Model
 {
     const LEAD = 'lead';
-    const CUSTOMER = 'customer';
+    const NEW_CUSTOMER = 'new_customer';
+    const RETURNING_CUSTOMER = 'returning_customer';
 
     protected $primaryKey = 'user_id';
 
@@ -21,6 +22,7 @@ class CustomerProfile extends Model
         'lead_source',
         'registered_at',
         'converted_at',
+        'returning_at',
         'meta',
     ];
 
@@ -29,6 +31,7 @@ class CustomerProfile extends Model
         return [
             'registered_at' => 'datetime',
             'converted_at' => 'datetime',
+            'returning_at' => 'datetime',
             'meta' => 'array',
         ];
     }

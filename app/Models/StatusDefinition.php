@@ -35,4 +35,9 @@ class StatusDefinition extends Model
     {
         return static::where('scope', 'order')->where('code', $code)->firstOrFail();
     }
+
+    public static function proyek($code)
+    {
+        return static::where('scope', 'project')->where('code', $code)->firstOrFail();
+    }
 }

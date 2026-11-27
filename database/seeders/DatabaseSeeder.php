@@ -125,6 +125,25 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        $statusProyek = [
+            ['menunggu_penugasan', 'Menunggu Penugasan', 'Menunggu Penugasan', ['dikerjakan']],
+            ['dikerjakan', 'Dikerjakan', 'Sedang Dikerjakan', ['revisi', 'selesai']],
+            ['revisi', 'Revisi', 'Revisi', ['dikerjakan', 'selesai']],
+            ['selesai', 'Selesai', 'Selesai', []],
+        ];
+
+        foreach ($statusProyek as $urutan => [$kode, $label, $labelCustomer, $berikutnya]) {
+            StatusDefinition::create([
+                'scope' => 'project',
+                'code' => $kode,
+                'label' => $label,
+                'customer_label' => $labelCustomer,
+                'sort_order' => $urutan + 1,
+                'allowed_next' => $berikutnya,
+                'is_final' => empty($berikutnya),
+            ]);
+        }
+
         $alasanTutup = [
             ['cancelled', 'permintaan_customer', 'Permintaan customer'],
             ['cancelled', 'lainnya', 'Lainnya'],
