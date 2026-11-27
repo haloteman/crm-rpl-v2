@@ -81,21 +81,30 @@ class DatabaseSeeder extends Seeder
             $akun->assignRole($user['role']);
         }
 
+        // kolom tambahan opsional pada form pesanan sesuai jenis layanan
         $layanans = [
-            ['Desain Logo', 'Logo yang mewakili identitas usaha Anda.'],
-            ['Desain Kaos', 'Desain kaos untuk komunitas, acara, atau merchandise.'],
-            ['Editing Video', 'Penyuntingan video untuk promosi dan media sosial.'],
-            ['Editing Foto', 'Retouch dan penyuntingan foto produk maupun acara.'],
-            ['Poster', 'Poster informatif dan menarik untuk berbagai kebutuhan.'],
-            ['Flyer', 'Flyer promosi yang ringkas dan mudah dibaca.'],
-            ['Banner', 'Banner cetak maupun digital untuk acara dan promosi.'],
+            ['Desain Logo', 'Logo yang mewakili identitas usaha Anda.', null],
+            ['Desain Kaos', 'Desain kaos untuk komunitas, acara, atau merchandise.', [
+                ['key' => 'jumlah_kaos', 'label' => 'Jumlah kaos'],
+                ['key' => 'ukuran_kaos', 'label' => 'Ukuran kaos'],
+            ]],
+            ['Editing Video', 'Penyuntingan video untuk promosi dan media sosial.', [
+                ['key' => 'durasi_video', 'label' => 'Durasi video'],
+            ]],
+            ['Editing Foto', 'Retouch dan penyuntingan foto produk maupun acara.', null],
+            ['Poster', 'Poster informatif dan menarik untuk berbagai kebutuhan.', null],
+            ['Flyer', 'Flyer promosi yang ringkas dan mudah dibaca.', null],
+            ['Banner', 'Banner cetak maupun digital untuk acara dan promosi.', [
+                ['key' => 'ukuran_cetak', 'label' => 'Ukuran cetak'],
+            ]],
         ];
 
-        foreach ($layanans as $urutan => [$nama, $ringkasan]) {
+        foreach ($layanans as $urutan => [$nama, $ringkasan, $kolomTambahan]) {
             Service::create([
                 'name' => $nama,
                 'slug' => Str::slug($nama),
                 'short_description' => $ringkasan,
+                'extra_field_schema' => $kolomTambahan,
                 'workflow_steps' => ['Konsultasi kebutuhan', 'Pembayaran DP', 'Pengerjaan desain', 'Revisi', 'Hasil akhir'],
                 'sort_order' => $urutan + 1,
             ]);

@@ -34,6 +34,7 @@ class PesananController extends Controller
             'budget_estimate' => 'nullable|numeric|min:0',
             'referensi_file' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:10240',
             'referensi_link' => 'nullable|url|max:2048',
+            'extra.*' => 'nullable|max:255',
         ], [
             'title.required' => 'Judul proyek wajib diisi',
             'title.max' => 'Judul proyek maksimal 255 karakter',
@@ -46,7 +47,17 @@ class PesananController extends Controller
             'referensi_file.mimes' => 'File referensi harus JPG, PNG, atau PDF',
             'referensi_file.max' => 'File referensi maksimal 10 MB',
             'referensi_link.url' => 'Tautan referensi harus berupa alamat web yang valid',
+            'extra.*.max' => 'Isian tambahan maksimal 255 karakter',
         ]);
+
+        // kolom tambahan sesuai jenis layanan, misalnya ukuran kaos atau durasi video
+        $isianTambahan = [];
+
+        foreach ($layanan->extra_field_schema ?? [] as $kolom) {
+            if ($request->filled('extra.'.$kolom['key'])) {
+                $isianTambahan[$kolom['key']] = $request->input('extra.'.$kolom['key']);
+            }
+        }
 
         $user = auth()->user();
         $statusAwal = StatusDefinition::pesanan('menunggu_konsultasi');
@@ -63,6 +74,7 @@ class PesananController extends Controller
             'description' => $request->description,
             'expected_deadline' => $request->expected_deadline,
             'budget_estimate' => $request->budget_estimate,
+            'extra_fields' => $isianTambahan ?: null,
             'contact_name' => $user->name,
             'contact_phone' => $user->customerProfile->phone,
         ]);
