@@ -103,6 +103,11 @@ class Order extends Model
         return $this->hasMany(OrderStatusHistory::class);
     }
 
+    public function bolehPindahKe($kode)
+    {
+        return in_array($kode, $this->status->allowed_next ?? []);
+    }
+
     public function ubahStatus($kode)
     {
         $statusBaru = StatusDefinition::pesanan($kode);

@@ -61,6 +61,11 @@ class User extends Authenticatable
         return $this->hasMany(DesignerSkill::class);
     }
 
+    public function projects()
+    {
+        return $this->hasMany(Project::class, 'designer_id');
+    }
+
     // tidak ada yang bisa reset atau hapus akunnya sendiri, dan akun Owner tidak bisa dihapus
     public function canResetPassword($target)
     {

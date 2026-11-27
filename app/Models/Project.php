@@ -39,4 +39,34 @@ class Project extends Model
     {
         return $this->hasMany(ProjectStatusHistory::class);
     }
+
+    public function designer()
+    {
+        return $this->belongsTo(User::class, 'designer_id');
+    }
+
+    public function assignments()
+    {
+        return $this->hasMany(ProjectAssignment::class);
+    }
+
+    public function bolehPindahKe($kode)
+    {
+        return in_array($kode, $this->status->allowed_next ?? []);
+    }
+
+    public function ubahStatus($kode)
+    {
+        $statusBaru = StatusDefinition::proyek($kode);
+
+        $this->statusHistories()->create([
+            'from_status' => $this->status->code,
+            'to_status' => $statusBaru->code,
+            'changed_by' => auth()->id(),
+            'changed_at' => now(),
+        ]);
+
+        $this->status()->associate($statusBaru);
+        $this->save();
+    }
 }

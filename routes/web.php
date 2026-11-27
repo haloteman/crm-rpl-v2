@@ -9,6 +9,7 @@ use App\Http\Controllers\LupaPasswordController;
 use App\Http\Controllers\PasswordController;
 use App\Http\Controllers\PelangganController;
 use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\PenugasanController;
 use App\Http\Controllers\PesananController;
 use App\Http\Controllers\PesananMasukController;
 use App\Http\Controllers\ProfilController;
@@ -67,6 +68,11 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
         Route::post('/pesanan-masuk/{order}/harga', [HargaController::class, 'simpan'])->middleware('permission:price.set')->name('harga.simpan');
         Route::post('/pesanan-masuk/{order}/dp', [PembayaranController::class, 'simpanDp'])->middleware('permission:revenue.manage')->name('pembayaran.dp');
         Route::post('/pesanan-masuk/{order}/pelunasan', [PembayaranController::class, 'simpanPelunasan'])->middleware('permission:revenue.manage')->name('pembayaran.pelunasan');
+    });
+
+    Route::middleware('permission:project.assign')->group(function () {
+        Route::get('/penugasan-proyek', [PenugasanController::class, 'index'])->name('penugasan.index');
+        Route::post('/penugasan-proyek/{project}', [PenugasanController::class, 'simpan'])->name('penugasan.simpan');
     });
 
     Route::get('/referensi/{referensi}', [ReferensiController::class, 'unduh'])->name('referensi.unduh');
