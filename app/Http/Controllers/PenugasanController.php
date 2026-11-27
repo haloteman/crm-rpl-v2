@@ -74,6 +74,54 @@ class PenugasanController extends Controller
         return redirect()->route('penugasan.index')->with('status', 'Proyek berhasil ditugaskan ke '.$desainer->name);
     }
 
+    public function pindah(Request $request, Project $project)
+    {
+        if (! in_array($project->status->code, ['dikerjakan', 'revisi'])) {
+            abort(403);
+        }
+
+        $request->validate([
+            'designer_id' => 'required',
+            'note' => 'required',
+        ], [
+            'designer_id.required' => 'Desainer pengganti wajib dipilih',
+            'note.required' => 'Alasan pemindahan wajib diisi',
+        ]);
+
+        $desainer = User::role([Role::DESAINER, Role::KEPALA_STAF_DESAINER])->find($request->designer_id);
+
+        if (! $desainer) {
+            return back()->withErrors(['designer_id' => 'Desainer tidak ditemukan'])->withInput();
+        }
+
+        if ($desainer->id == $project->designer_id) {
+            return back()->withErrors(['designer_id' => 'Pilih desainer yang berbeda'])->withInput();
+        }
+
+        // penugasan lama diakhiri, riwayat progres tetap tersimpan di proyek
+        $project->assignments()->where('is_current', true)->update(['is_current' => false, 'ended_at' => now()]);
+
+        $project->assignments()->create([
+            'designer_id' => $desainer->id,
+            'assigned_by' => auth()->id(),
+            'assignment_type' => ProjectAssignment::PINDAH,
+            'assigned_at' => now(),
+            'note' => $request->note,
+        ]);
+
+        // desainer lama keluar dari chat, desainer baru bergabung
+        $project->chat->participants()->where('user_id', $project->designer_id)->update(['left_at' => now()]);
+
+        $project->chat->participants()->updateOrCreate(
+            ['user_id' => $desainer->id],
+            ['participant_role' => ChatParticipant::DESAINER, 'joined_at' => now(), 'left_at' => null]
+        );
+
+        $project->update(['designer_id' => $desainer->id]);
+
+        return back()->with('status', 'Proyek berhasil dipindahkan ke '.$desainer->name);
+    }
+
     // keahlian dan jumlah proyek aktif dipakai untuk menimbang beban kerja
     private function daftarDesainer()
     {

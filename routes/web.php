@@ -86,6 +86,7 @@ Route::middleware(['auth', 'wajib-ganti-password'])->group(function () {
     Route::middleware('permission:project.assign')->group(function () {
         Route::get('/penugasan-proyek', [PenugasanController::class, 'index'])->name('penugasan.index');
         Route::post('/penugasan-proyek/{project}', [PenugasanController::class, 'simpan'])->name('penugasan.simpan');
+        Route::post('/penugasan-proyek/{project}/pindah', [PenugasanController::class, 'pindah'])->name('penugasan.pindah');
     });
 
     Route::middleware('permission:order.assigned')->group(function () {
